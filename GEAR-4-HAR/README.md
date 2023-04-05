@@ -15,7 +15,7 @@ The file `GEAR_Video.mp4`shows a video of all three activities being recognized 
 
 ---
 
-## Gaze Data
+## GazeData
 
 The raw gaze data collected with the Microsoft HoloLens 2 and the Pupil Core can be found in their respective folders.
 
