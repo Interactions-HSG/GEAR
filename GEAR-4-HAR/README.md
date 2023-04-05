@@ -11,7 +11,7 @@ https://doi.org/10.1145/3588015.358840
 
 ## Demo Video
 
-The file `GEAR_Video.mp4`shows a video of all three activities being recognized by by GEAR.
+The file `GEAR_Video.mp4`shows a video of all three activities being recognized by GEAR.
 
 ---
 
