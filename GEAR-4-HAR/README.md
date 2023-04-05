@@ -37,4 +37,24 @@ This folder contains 3 Jupyter Notebooks for the classification of activities fr
 
 - *OnlineFeaturesCalculation.ipynb* - This notebook is an adaption of the offline feature calculation and includes references to the other two notebooks. It needs to be used with the Unity Application.
 
-Note that the code for including the privacy-preserving personal datastores (Solid Pods) is not included in the supplementary material. An anonymized version of the code would hide important parts of the code and therefore make it difficult to understand. Upon publication of our paper, this code will  be included in a non-anonymized way. 
+Note that the code for including the privacy-preserving personal datastores (Solid Pods) is not included in the supplementary material. An anonymized version of the code would hide important parts of the code and therefore make it difficult to understand. Upon publication of our paper, this code will  be included in a non-anonymized way.
+
+---
+
+## Reference
+
+@article{bektasetal2023,
+    title={GEAR: Gaze-enabled augmented reality for human activity recognition.},
+    author={Kenan Bektaş, Jannis Strecker, Simon Mayer, Kimberly Garcia, Jonas Hermann, Kay Erik Jenss, Yasmine Sheila Antille, and Marc Elias Solèr},
+    journal={},
+    volume={},
+    number={},
+    pages={},
+    ISSN={},
+    url={},
+    DOI={https://doi.org/10.1145/3588015.358840},
+    publisher={},
+    month={},
+    year={2023}
+}
+
