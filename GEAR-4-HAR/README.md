@@ -2,12 +2,7 @@
 
 *Supplementary Material of the publication*:
 
-Kenan Bektaş, Jannis Strecker, Simon Mayer, Kimberly Garcia, Jonas Her-
-mann, Kay Erik Jenss, Yasmine Sheila Antille, and Marc Elias Solèr. 2023.
-GEAR: Gaze-enabled augmented reality for human activity recognition. In
-2023 Symposium on Eye Tracking Research and Applications (ETRA ’23), May
-30-June 2, 2023, Tubingen, Germany. ACM, New York, NY, USA, 9 pages.
-https://doi.org/10.1145/3588015.358840
+Kenan Bektaş, Jannis Strecker, Simon Mayer, Kimberly Garcia, Jonas Hermann, Kay Erik Jenss, Yasmine Sheila Antille, and Marc Elias Solèr. 2023. GEAR: Gaze-enabled augmented reality for human activity recognition. In 2023 Symposium on Eye Tracking Research and Applications (ETRA ’23), May 30-June 2, 2023, Tübingen, Germany. ACM, New York, NY, USA, 9 pages. https://doi.org/10.1145/3588015.358840
 
 ## Demo Video
 
@@ -16,7 +11,7 @@ The file [`GEAR_Video.mp4`](https://github.com/Interactions-HSG/GEAR/blob/main/G
 
 ## GazeData
 
-The raw gaze data collected with the Microsoft HoloLens 2 and the Pupil Core can be found in their respective folders ([/RawGazeDataFromHL2](https://github.com/Interactions-HSG/GEAR/tree/main/GEAR-4-HAR/GazeData/RawGazeDataFromHL2) and [/RawGazeDataFromPupilCore](https://github.com/Interactions-HSG/GEAR/tree/main/GEAR-4-HAR/GazeData/RawGazeDataFromPupilCore)).
+The raw gaze data collected with the Microsoft HoloLens 2 and the Pupil Core can be found in their respective folders: [/RawGazeDataFromHL2](https://github.com/Interactions-HSG/GEAR/tree/main/GEAR-4-HAR/GazeData/RawGazeDataFromHL2) and [/RawGazeDataFromPupilCore](https://github.com/Interactions-HSG/GEAR/tree/main/GEAR-4-HAR/GazeData/RawGazeDataFromPupilCore).
 
 
 ## AR Application
