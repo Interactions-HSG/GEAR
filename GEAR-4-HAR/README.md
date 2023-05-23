@@ -33,7 +33,7 @@ Note that the code for including the privacy-preserving personal datastores (Sol
 
 
 ## Reference
-```
+```bibtex
 @article{bektasetal2023,
     title={GEAR: Gaze-enabled augmented reality for human activity recognition.},
     author={Kenan Bektaş, Jannis Strecker, Simon Mayer, Kimberly Garcia, Jonas Hermann, Kay Erik Jenss, Yasmine Sheila Antille, and Marc Elias Solèr},
