@@ -13,14 +13,14 @@ Abstract:
 The file [`GEAR_Video.mp4`](https://github.com/Interactions-HSG/GEAR/blob/main/GEAR-4-HAR/GEAR_Video.mp4) shows a video of all three activities being recognized by GEAR.
 
 
-## 👀 GazeData 
+## 👀 Gaze Data 
 
 The raw gaze data collected with the Microsoft HoloLens 2 and the Pupil Core can be found in their respective folders: [/GazeData/RawGazeDataFromHL2](https://github.com/Interactions-HSG/GEAR/tree/main/GEAR-4-HAR/GazeData/RawGazeDataFromHL2) and [/GazeData/RawGazeDataFromPupilCore](https://github.com/Interactions-HSG/GEAR/tree/main/GEAR-4-HAR/GazeData/RawGazeDataFromPupilCore).
 
 
 ## 🚀 AR Application 
 
-The folder [/UnityApp](https://github.com/Interactions-HSG/GEAR/tree/main/GEAR-4-HAR/UnityApp) contains the AR application. See the README file in the folder for further instructions.
+The folder [/UnityApp](https://github.com/Interactions-HSG/GEAR/tree/main/GEAR-4-HAR/UnityApp) contains the AR application for the Microsoft HoloLens 2. See the README file in the folder for further instructions.
 
 
 ## 📈 Activity Recognition 
