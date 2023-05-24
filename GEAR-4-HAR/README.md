@@ -11,7 +11,7 @@ The file [`GEAR_Video.mp4`](https://github.com/Interactions-HSG/GEAR/blob/main/G
 
 ## 👀 GazeData 
 
-The raw gaze data collected with the Microsoft HoloLens 2 and the Pupil Core can be found in their respective folders: [/RawGazeDataFromHL2](https://github.com/Interactions-HSG/GEAR/tree/main/GEAR-4-HAR/GazeData/RawGazeDataFromHL2) and [/RawGazeDataFromPupilCore](https://github.com/Interactions-HSG/GEAR/tree/main/GEAR-4-HAR/GazeData/RawGazeDataFromPupilCore).
+The raw gaze data collected with the Microsoft HoloLens 2 and the Pupil Core can be found in their respective folders: [/GazeData/RawGazeDataFromHL2](https://github.com/Interactions-HSG/GEAR/tree/main/GEAR-4-HAR/GazeData/RawGazeDataFromHL2) and [/GazeData/RawGazeDataFromPupilCore](https://github.com/Interactions-HSG/GEAR/tree/main/GEAR-4-HAR/GazeData/RawGazeDataFromPupilCore).
 
 
 ## 🚀 AR Application 
