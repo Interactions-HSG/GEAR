@@ -44,18 +44,22 @@ This research has been done by the group of Interaction- and Communication-based
 
 ## 📑 Reference 
 ```bibtex
-@inproceedings{bektas2023,
-  title = {{{GEAR}}: {{Gaze-enabled}} Augmented Reality for Human Activity Recognition},
-  booktitle = {{{ACM Symposium}} on {{Eye Tracking Research}} and {{Applications}}},
-  author = {Bektaş, Kenan and Strecker, Jannis and Mayer, Simon and Garcia, Kimberly and Hermann, Jonas and Jenss, Kay Erik and Antille, Yasmine Sheila and Solèr, Marc Elias},
-  date = {2023},
-  series = {{{ETRA}} '23},
-  publisher = {{ACM}},
-  location = {{New York, NY, USA}},
-  doi = {10.1145/3588015.3588402},
-  url={https://www.alexandria.unisg.ch/handle/20.500.14171/107618},
-  abstract = {Head-mounted Augmented Reality (AR) displays overlay digital information on physical objects. Through eye tracking, they allow novel interaction methods and provide insights into user attention, intentions, and activities. However, only few studies have used gaze-enabled AR displays for human activity recognition (HAR). In an experimental study, we collected gaze data from 10 users on a HoloLens 2 (HL2) while they performed three activities (i.e., read, inspect, search). We trained machine learning models (SVM, Random Forest, Extremely Randomized Trees) with extracted features and achieved an up to 98.7\% activity-recognition accuracy. On the HL2, we provided users with an AR feedback that is relevant to their current activity. We present the components of our system (GEAR) including a novel solution to enable the controlled sharing of collected data. We provide the scripts and anonymized datasets which can be used as teaching material in graduate courses or for reproducing our findings.},
-  eventtitle = {{{ETRA}} '23: 2023 {{Symposium}} on {{Eye Tracking Research}} and {{Applications}}},
+@inproceedings{bektasetal2023,
+author = {Bekta\c{s}, Kenan and Strecker, Jannis and Mayer, Simon and Garcia, Dr. Kimberly and Hermann, Jonas and Jen\ss{}, Kay Erik and Antille, Yasmine Sheila and Sol\`{e}r, Marc},
+title = {GEAR: Gaze-Enabled Augmented Reality For&nbsp;Human&nbsp;Activity&nbsp;Recognition},
+year = {2023},
+isbn = {9798400701504},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3588015.3588402},
+doi = {10.1145/3588015.3588402},
+abstract = {Head-mounted Augmented Reality (AR) displays overlay digital information on physical objects. Through eye tracking, they allow novel interaction methods and provide insights into user attention, intentions, and activities. However, only few studies have used gaze-enabled AR displays for human activity recognition (HAR). In an experimental study, we collected gaze data from 10 users on a HoloLens 2 (HL2) while they performed three activities (i.e., read, inspect, search). We trained machine learning models (SVM, Random Forest, Extremely Randomized Trees) with extracted features and achieved an up to 98.7% activity-recognition accuracy. On the HL2, we provided users with an AR feedback that is relevant to their current activity. We present the components of our system (GEAR) including a novel solution to enable the controlled sharing of collected data. We provide the scripts and anonymized datasets which can be used as teaching material in graduate courses or for reproducing our findings.},
+booktitle = {Proceedings of the 2023 Symposium on Eye Tracking Research and Applications},
+articleno = {9},
+numpages = {9},
+keywords = {human activity recognition, pervasive eye tracking, attention, augmented reality, context-awareness},
+location = {Tubingen, Germany},
+series = {ETRA '23}
 }
 ```
 
