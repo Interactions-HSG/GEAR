@@ -1,8 +1,9 @@
-// based on https://gist.github.com/amimaro/10e879ccb54b2cacae4b81abea455b10
+// largely based on https://gist.github.com/amimaro/10e879ccb54b2cacae4b81abea455b10
 using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using TMPro;
 using UnityEngine;
 
 public class HTTPListener : MonoBehaviour
@@ -11,11 +12,20 @@ public class HTTPListener : MonoBehaviour
 	private HttpListener listener;
 	private Thread listenerThread;
 	public ActivityReceiver ActivityReceiver;
+	public GazeDataSender GazeDataSender;
 	public GameObject actiReceiver;
+
+	public GameObject HL2IPText;
 
 	public string httpTmpActivity = "";
 	public float httpTmpProbability = 0f;
 	public bool httpNewActivityArrived = false;
+
+	public bool NewDesktopIPArrived = false;
+	public string TmpDesktopIP = "";
+	public string TmpDesktopPort = "";
+
+
 
 	void Start()
 	{
@@ -24,14 +34,18 @@ public class HTTPListener : MonoBehaviour
 		listener = new HttpListener();
 
 		var thisIP = GetIP4Address();
-		listener.Prefixes.Add($"http://{thisIP}:5000/"); 
+		var thisPort = GetRandomUnusedPort();
+		var ipAndPort = $"http://{thisIP}:{thisPort}/";
+		HL2IPText.GetComponent<TextMeshPro>().text = ipAndPort;
+		
+		listener.Prefixes.Add(ipAndPort); 
 
 		listener.AuthenticationSchemes = AuthenticationSchemes.Anonymous;
 		listener.Start();
 
 		listenerThread = new Thread(StartListener);
 		listenerThread.Start();
-		Debug.Log("Server Started");
+		Debug.Log($"Server Started at {ipAndPort}");
 
 		ActivityReceiver = actiReceiver.GetComponent<ActivityReceiver>();
 
@@ -65,6 +79,16 @@ public class HTTPListener : MonoBehaviour
 		return IP4Address;
 	}
 
+	// from here: https://stackoverflow.com/a/3978040
+	public static int GetRandomUnusedPort()
+	{
+		var listener = new TcpListener(IPAddress.Any, 0);
+		listener.Start();
+		var port = ((IPEndPoint)listener.LocalEndpoint).Port;
+		listener.Stop();
+		return port;
+	}
+
 	private void StartListener()
 	{
 		while (true)
@@ -81,30 +105,71 @@ public class HTTPListener : MonoBehaviour
 		Debug.Log("Request received");
 		var activity = "";
 		var probability = 0f;
+		var desktopIP = "";
+		var desktopPort = "";
 
-		if (context.Request.QueryString.AllKeys.Length > 0)
+		try
 		{
-			foreach (var key in context.Request.QueryString.AllKeys)
+			if (context.Request.QueryString.AllKeys.Length > 0)
 			{
-				var value = context.Request.QueryString.GetValues(key)[0];
-
-				Debug.Log($"key: {key}");
-				Debug.Log($"value: {value}");
-				
-				if (key == "activity")
+				foreach (var key in context.Request.QueryString.AllKeys)
 				{
-					activity = value;
-					Debug.Log("is key");
+					var value = context.Request.QueryString.GetValues(key)[0];
 
-				} else if (key == "probability")
-                {
-					float.TryParse(value, out probability);
-					
+					Debug.Log($"key: {key}");
+					Debug.Log($"value: {value}");
+
+
+					if (key == "activity")
+					{
+						activity = value;
+						Debug.Log("is activity");
+
+					}
+					else if (key == "probability")
+					{
+						Debug.Log("is activity");
+						float.TryParse(value, out probability);
+
+					}
+
+					if (key == "desktopip")
+					{
+						Debug.Log("is desktopip");
+						desktopIP = value;
+
+					}
+					else if (key == "port")
+					{
+
+						desktopPort = value;
+						Debug.Log($"is port: {desktopPort}");
+						Debug.Log($"Did receive full new desktop IP: {desktopIP}:{desktopPort}.");
+
+					}
+					Debug.Log($"Did receive full new desktop IP: {desktopIP}:{desktopPort}.");
 				}
 
 			}
-			if (activity != "" && probability != 0f)
-            {
+			
+		}
+		finally
+        {
+			// context.Response.Close();
+			context.Response.OutputStream.Close();
+
+			// if (desktopIP != "" && desktopPort != "")
+			if (!string.IsNullOrEmpty(desktopIP) && !string.IsNullOrEmpty(desktopPort))
+			{
+				Debug.Log($"Received new desktop IP: {desktopIP}:{desktopPort}.");
+				NewDesktopIPArrived = true;
+				TmpDesktopIP = desktopIP;
+				TmpDesktopPort = desktopPort;
+				
+			}
+			// only proceed if we have both, a new activity and a new probability
+			else if (activity != "" && probability != 0f)
+			{
 				ActivityReceiver.tmpActivity = activity;
 				ActivityReceiver.tmpProbability = probability;
 				ActivityReceiver.newActivityArrived = true;
@@ -114,8 +179,12 @@ public class HTTPListener : MonoBehaviour
 				Debug.Log($"ActivityReceiver.newActivityArrived: {ActivityReceiver.newActivityArrived}");
 				Debug.Log($"Received new activity: {activity} with probability {probability}.");
 			}
-			
+
+
+
 		}
-		context.Response.Close();
+
+	
+
 	}
 }

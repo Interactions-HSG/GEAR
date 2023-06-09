@@ -11,9 +11,9 @@ public class ActivityReceiver : MonoBehaviour
     public GameObject ActivityNotifyContainer;
     public GameObject ActivityText;
     public GameObject SuggestionText;
+
     public HTTPListener HTTPListener;
 
-   
     public string tmpActivity = "";
     public float tmpProbability = 0f;
     public bool newActivityArrived = false;
@@ -21,7 +21,9 @@ public class ActivityReceiver : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        Debug.Log("start activity receiver");
+        Debug.Log($"tmpActivity: {tmpActivity}, tmpProbability: {tmpProbability}");
+        Debug.Log($"this ActivityReceiver is {this}");
     }
 
     // Update is called once per frame
@@ -53,9 +55,9 @@ public class ActivityReceiver : MonoBehaviour
 
     private void ReceiveNewActivity(string activity, float probability)
     {
-            Debug.Log("Displaying new activity");
+            Debug.Log($"Displaying new activity: {activity}");
             var probPercent = probability.ToString("P", CultureInfo.InvariantCulture);
-            ActivityText.GetComponent<TextMeshPro>().text = $"{activity} ({probPercent})";
+            ActivityText.GetComponent<TextMeshPro>().text = $"{activity} ({probPercent}).";
             var suggestion = "";
 
             switch (activity)
@@ -67,7 +69,7 @@ public class ActivityReceiver : MonoBehaviour
                     suggestion = "Should I open a technical drawing for you?";
                     break;
                 case "Search":
-                    suggestion = "What are you searching for? Maybe I can help you find it.";
+                    suggestion = "Should I open a semantic hypermedia search engine for you?";
                     break;
                 default:
                     break;
