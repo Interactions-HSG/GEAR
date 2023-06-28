@@ -1,3 +1,5 @@
+
+
 # GEAR: Gaze-enabled Augmented Reality for Human Activity Recognition
 
 *This repository contains supplementary material of the publication*:
@@ -11,6 +13,9 @@ Abstract:
 ## 📹 Demo Video
 
 The file [`GEAR_Video.mp4`](https://github.com/Interactions-HSG/GEAR/blob/main/GEAR-4-HAR/GEAR_Video.mp4) shows a video of all three activities being recognized by GEAR.
+
+https://github.com/Interactions-HSG/GEAR/assets/11094168/52a6dc06-6a9b-4782-9c33-6f3c907363cc
+
 
 ## 👀 Gaze Data
 
