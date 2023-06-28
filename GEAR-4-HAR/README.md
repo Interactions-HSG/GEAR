@@ -12,7 +12,7 @@ Abstract:
 
 ## 📹 Demo Video
 
-The file [`GEAR_Video.mp4`](https://github.com/Interactions-HSG/GEAR/blob/main/GEAR-4-HAR/GEAR_Video.mp4) shows a video of all three activities being recognized by GEAR.
+The file [`GEAR_Video.mp4`](https://github.com/Interactions-HSG/GEAR/blob/main/GEAR-4-HAR/GEAR_Video.mp4) shows a video of all three activities being recognized by GEAR. It can also be found on [YouTube](https://www.youtube.com/watch?v=Dq-Z5p61J8E).
 
 https://github.com/Interactions-HSG/GEAR/assets/11094168/52a6dc06-6a9b-4782-9c33-6f3c907363cc
 
