@@ -1,0 +1,428 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>dotNetRdf.Skos</name>
+    </assembly>
+    <members>
+        <member name="T:VDS.RDF.Skos.SkosCollection">
+            <summary>
+            Represents a labelled group of SKOS concepts.
+            </summary>
+        </member>
+        <member name="M:VDS.RDF.Skos.SkosCollection.#ctor(VDS.RDF.INode,VDS.RDF.IGraph)">
+            <summary>
+            Creates a new collection for the given resource.
+            </summary>
+            <param name="resource">Resource representing the collection.</param>
+            <param name="graph">Graph containing the resource representing the collection.</param>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosCollection.Member">
+            <summary>
+            Gets the members of the collection.
+            </summary>
+        </member>
+        <member name="T:VDS.RDF.Skos.SkosConcept">
+            <summary>
+            Represents a SKOS concept.
+            </summary>
+        </member>
+        <member name="M:VDS.RDF.Skos.SkosConcept.#ctor(VDS.RDF.INode,VDS.RDF.IGraph)">
+            <summary>
+            Creates a new concept for the given resource.
+            </summary>
+            <param name="resource">Resource representing the concept.</param>
+            <param name="graph">The graph containing the concept.</param>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosConcept.InScheme">
+            <summary>
+            Gets the concept schemes the concept is contained in.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosConcept.TopConceptOf">
+            <summary>
+            Get the concept schemes the concept is the top concept of.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosConcept.PrefLabel">
+            <summary>
+            Gets the preferred labels of the concept.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosConcept.AltLabel">
+            <summary>
+            Gets the alternative labels of the concept.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosConcept.HiddenLabel">
+            <summary>
+            Gets the hidden labels of the concept.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosConcept.Notation">
+            <summary>
+            Gets a unique identifiers of the concept in a given concept scheme.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosConcept.Note">
+            <summary>
+            Gets the general notes of the concept.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosConcept.ChangeNote">
+            <summary>
+            Gets the modification notes of the concept.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosConcept.Definition">
+            <summary>
+            Gets the formal explanation of the concept.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosConcept.EditorialNote">
+            <summary>
+            Gets the editorial notes the concept.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosConcept.Example">
+            <summary>
+            Gets examples of the use of the concept.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosConcept.HistoryNote">
+            <summary>
+            Gets notes about the past of the concept.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosConcept.ScopeNote">
+            <summary>
+            Gets notes that help to clarify the meaning and/or the use of the concept.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosConcept.SemanticRelation">
+            <summary>
+            Gets concepts related by meaning.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosConcept.Broader">
+            <summary>
+            Gets more general concepts. 
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosConcept.Narrower">
+            <summary>
+            Gets more specific concepts.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosConcept.Related">
+            <summary>
+            Gets associated concepts.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosConcept.BroaderTransitive">
+            <summary>
+            Gets more general concepts (transitive).
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosConcept.NarrowerTransitive">
+            <summary>
+            Gets more specific concepts (transitive).
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosConcept.MappingRelation">
+            <summary>
+            Gets concepts with comparable meaning from other concept schemes.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosConcept.CloseMatch">
+            <summary>
+            Gets confidently interchangeable concepts from other concept schemes.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosConcept.ExactMatch">
+            <summary>
+            Gets interchangeably similar concepts from other concept schemes.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosConcept.BroadMatch">
+            <summary>
+            Gets more general concepts from other concept schemes.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosConcept.NarrowMatch">
+            <summary>
+            Gets more specific concepts from other concept schemes.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosConcept.RelatedMatch">
+            <summary>
+            Gets associated concepts from other concept schemes.
+            </summary>
+        </member>
+        <member name="T:VDS.RDF.Skos.SkosConceptScheme">
+            <summary>
+            Represents an aggregation of one or more SKOS concepts.
+            </summary>
+        </member>
+        <member name="M:VDS.RDF.Skos.SkosConceptScheme.#ctor(VDS.RDF.INode,VDS.RDF.IGraph)">
+            <summary>
+            Creates a new concept schemes for the given resource.
+            </summary>
+            <param name="resource">Resource representing the concept scheme.</param>
+            <param name="graph">The graph containing the concept scheme.</param>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosConceptScheme.HasTopConcept">
+            <summary>
+            Gets the top concepts of the concept scheme.
+            </summary>
+        </member>
+        <member name="T:VDS.RDF.Skos.SkosGraph">
+            <summary>
+            Represents a wrapper around a SKOS graph providing convenient access to concepts, schemes, and collections.
+            </summary>
+        </member>
+        <member name="M:VDS.RDF.Skos.SkosGraph.#ctor(VDS.RDF.IRefNode)">
+            <summary>
+            Creates a new SKOS graph.
+            </summary>
+            <param name="name">The name to assign to the SKOS graph.</param>
+        </member>
+        <member name="M:VDS.RDF.Skos.SkosGraph.#ctor(VDS.RDF.IGraph)">
+            <summary>
+            Creates a new SKOS graph for the given graph.
+            </summary>
+            <param name="g">The graph this SKOS graph wraps.</param>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosGraph.ConceptSchemes">
+            <summary>
+            Gets concept schemes contained in the graph.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosGraph.Concepts">
+            <summary>
+            Gets concepts contained in the graph.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosGraph.Collections">
+            <summary>
+            Gets collections contained in the graph.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosGraph.OrderedCollections">
+            <summary>
+            Gets ordered collections contained in the graph.
+            </summary>
+        </member>
+        <member name="T:VDS.RDF.Skos.SkosHelper">
+            <summary>
+            Static Helper class for the SKOS API.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.Prefix">
+            <summary>
+            SKOS namespace and prefix.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.Namespace">
+            <summary>
+            SKOS namespace and prefix.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.Concept">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.ConceptScheme">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.InScheme">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.HasTopConcept">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.TopConceptOf">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.PrefLabel">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.AltLabel">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.HiddenLabel">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.Notation">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.Note">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.ChangeNote">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.Definition">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.EditorialNote">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.Example">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.HistoryNote">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.ScopeNote">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.SemanticRelation">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.Broader">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.Narrower">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.Related">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.BroaderTransitive">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.NarrowerTransitive">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.Collection">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.OrderedCollection">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.Member">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.MemberList">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.MappingRelation">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.CloseMatch">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.ExactMatch">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.BroadMatch">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.NarrowMatch">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Skos.SkosHelper.RelatedMatch">
+            <summary>
+            Constant URIs for classes and properties exposed by the SKOS API and its derived classes.
+            </summary>
+        </member>
+        <member name="T:VDS.RDF.Skos.SkosMember">
+            <summary>
+            Represents SKOS resources that can be members of collections (concepts and collections).
+            </summary>
+        </member>
+        <member name="T:VDS.RDF.Skos.SkosOrderedCollection">
+            <summary>
+            Represents an ordered group of SKOS concepts.
+            </summary>
+        </member>
+        <member name="M:VDS.RDF.Skos.SkosOrderedCollection.#ctor(VDS.RDF.INode,VDS.RDF.IGraph)">
+            <summary>
+            Creates a new ordered collection for the given resource.
+            </summary>
+            <param name="resource">Resource representing the ordered collection.</param>
+            <param name="graph">The graph containing the collection.</param>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosOrderedCollection.MemberList">
+            <summary>
+            Gets the ordered list of members of the collection.
+            </summary>
+        </member>
+        <member name="T:VDS.RDF.Skos.SkosResource">
+            <summary>
+            Represents a SKOS resource.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosResource.Resource">
+            <summary>
+            Gets the original resource underlying the SKOS resource.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Skos.SkosResource.Graph">
+            <summary>
+            Gets the graph containing the SKOS resource.
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,34 @@
+{
+  "@context": "https://www.w3.org/2019/wot/td/v1.1",
+  "title": "The lamp on Kim's table",
+  "id": "urn:r400_lamp1",
+  "base": "http://10.2.2.33:1880/r400/kimlamp",
+  "description": "A lamp to play around with",
+  "securityDefinitions": {
+    "nosec_sc": {
+      "scheme": "nosec"
+    }
+  },
+  "security": "nosec_sc",
+  "properties": {
+    "state": {
+      "title": "state",
+      "observable": false,
+      "readOnly": false,
+      "description": "State of the lamp",
+      "type": "object",
+      "properties":{"on":{"type":"boolean"}, "color":{"type":"string"}, "brightness":{"type":"integer"}},
+      "forms": [
+        {
+          "op": [
+            "writeproperty",
+            "readproperty"
+          ],
+          "href": "http://10.2.2.33:1880/r400/kimlamp"
+        }
+      ]
+    }
+  },
+  "actions": {},
+  "events": {}
+}

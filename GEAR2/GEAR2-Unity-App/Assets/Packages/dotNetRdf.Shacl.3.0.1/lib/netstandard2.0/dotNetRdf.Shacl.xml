@@ -1,0 +1,729 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>dotNetRdf.Shacl</name>
+    </assembly>
+    <members>
+        <member name="F:VDS.RDF.Shacl.Constraints.Compare._comparer">
+            <summary>
+            The internal comparer to use. This instance is not actually used for comparison, just for checking if nodes are comparable,
+            so it uses default settings for culture and sort options.
+            </summary>
+        </member>
+        <member name="T:VDS.RDF.Shacl.Path">
+            <summary>
+            Represents a SHACL property path.
+            </summary>
+        </member>
+        <member name="M:VDS.RDF.Shacl.Path.#ctor(VDS.RDF.INode,VDS.RDF.IGraph)">
+            <summary>
+            Initializes a new instance of the <see cref="T:VDS.RDF.Shacl.Path"/> class.
+            </summary>
+            <param name="node"></param>
+            <param name="shapesGraph">The graph containing the SHACL path.</param>
+        </member>
+        <member name="T:VDS.RDF.Shacl.ShapesGraph">
+            <summary>
+            Represents a SHACL shapes graph that acts as a fully compliant SHACL Core and SHACL-SPARQL processor.
+            </summary>
+            <remarks>The Datatype constraint component is not supported under .NET Standard 1.4.</remarks>
+        </member>
+        <member name="M:VDS.RDF.Shacl.ShapesGraph.#ctor(VDS.RDF.IGraph)">
+            <summary>
+            Initializes a new instance of the <see cref="T:VDS.RDF.Shacl.ShapesGraph"/> class.
+            </summary>
+            <param name="shapesGraph">The original graph containing SHACL shapes.</param>
+        </member>
+        <member name="M:VDS.RDF.Shacl.ShapesGraph.Validate(VDS.RDF.IGraph)">
+            <summary>
+            Checks the given data graph against this shapes graph for SHACL conformance and reports validation results.
+            </summary>
+            <param name="dataGraph">The data graph to check for SHACL conformance.</param>
+            <returns>A SHACL validation report containing possible validation results.</returns>
+        </member>
+        <member name="M:VDS.RDF.Shacl.ShapesGraph.Conforms(VDS.RDF.IGraph)">
+            <summary>
+            Checks the given data graph against this shapes graph for SHACL conformance.
+            </summary>
+            <param name="dataGraph">The data graph to check for SHACL conformance.</param>
+            <returns>Whether the data graph SHACL conforms to this shapes graph.</returns>
+        </member>
+        <member name="T:VDS.RDF.Shacl.Validation.Report">
+            <summary>
+            Represents a SHACL validation report.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Validation.Report.Conforms">
+            <summary>
+            Gets a value indicating whether conformance checking was successful.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Validation.Report.Normalised">
+            <summary>
+            Gets a normalised graph containing validation report data as required for SHACL compliance testing.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Validation.Report.Results">
+            <summary>
+            Gets the collection of validation results for this report.
+            </summary>
+        </member>
+        <member name="M:VDS.RDF.Shacl.Validation.Report.Parse(VDS.RDF.IGraph)">
+            <summary>
+            Wraps a graph with SHACL validation report data.
+            </summary>
+            <param name="g">The graph containing SHACL validation report statements.</param>
+            <returns>A report representing the SHACL validation report in the erapped graph.</returns>
+        </member>
+        <member name="T:VDS.RDF.Shacl.Validation.Result">
+            <summary>
+            Represents a SHACL validation result.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Validation.Result.Severity">
+            <summary>
+            Gets or sets the severity of the result.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Validation.Result.FocusNode">
+            <summary>
+            Gets or sets the focus node that has caused thes result.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Validation.Result.ResultValue">
+            <summary>
+            Gets or sets the value that has caused the result.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Validation.Result.SourceShape">
+            <summary>
+            Gets or sets the shape that the given focus node was validated against.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Validation.Result.Message">
+            <summary>
+            Gets or sets additional textual details about the result.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Validation.Result.SourceConstraintComponent">
+            <summary>
+            Gets or sets the IRI of the constraint component that has caused the result.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Validation.Result.ResultPath">
+            <summary>
+            Gets or sets the optional path of the property shape that has caused the result.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Validation.Result.SourceConstraint">
+            <summary>
+            Gets or sets the optional SPARQL-based constraint the has caused the result.
+            </summary>
+        </member>
+        <member name="T:VDS.RDF.Shacl.Validation.ResultCollection">
+            <summary>
+            Represents a collection of SHACL validation results.
+            </summary>
+        </member>
+        <member name="T:VDS.RDF.Shacl.Vocabulary">
+            <summary>
+            Represents the SHACL vocabulary.
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Shacl.Vocabulary.BaseUri">
+            <summary>
+            The SHACL base URI.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.AlternativePath">
+            <summary>
+            Gets a node representing alternativePath.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.And">
+            <summary>
+            Gets a node representing and.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.AndConstraintComponent">
+            <summary>
+            Gets a node representing AndConstraintComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Ask">
+            <summary>
+            Gets a node representing ask.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.BlankNode">
+            <summary>
+            Gets a node representing BlankNode.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.BlankNodeOrIri">
+            <summary>
+            Gets a node representing BlankNodeOrIRI.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.BlankNodeOrLiteral">
+            <summary>
+            Gets a node representing BlankNodeOrLiteral.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Class">
+            <summary>
+            Gets a node representing class.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.ClassConstraintComponent">
+            <summary>
+            Gets a node representing ClassConstraintComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Closed">
+            <summary>
+            Gets a node representing closed.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.ClosedConstraintComponent">
+            <summary>
+            Gets a node representing ClosedConstraintComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Conforms">
+            <summary>
+            Gets a node representing conforms.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.ConstraintComponent">
+            <summary>
+            Gets a node representing ConstraintComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Datatype">
+            <summary>
+            Gets a node representing datatype.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.DatatypeConstraintComponent">
+            <summary>
+            Gets a node representing DatatypeConstraintComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Deactivated">
+            <summary>
+            Gets a node representing deactivated.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Declare">
+            <summary>
+            Gets a node representing declare.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Disjoint">
+            <summary>
+            Gets a node representing disjoint.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.DisjointConstraintComponent">
+            <summary>
+            Gets a node representing DisjointConstraintComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.EqualsConstraintComponent">
+            <summary>
+            Gets a node representing EqualsConstraintComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.EqualsNode">
+            <summary>
+            Gets a node representing equals.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Flags">
+            <summary>
+            Gets a node representing flags.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.FocusNode">
+            <summary>
+            Gets a node representing focusNode.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.HasValue">
+            <summary>
+            Gets a node representing hasValue.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.HasValueConstraintComponent">
+            <summary>
+            Gets a node representing HasValueConstraintComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.IgnoredProperties">
+            <summary>
+            Gets a node representing ignoredProperties.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.In">
+            <summary>
+            Gets a node representing in.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.InConstraintComponent">
+            <summary>
+            Gets a node representing InConstraintComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.InversePath">
+            <summary>
+            Gets a node representing inversePath.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Iri">
+            <summary>
+            Gets a node representing IRI.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.IriOrLiteral">
+            <summary>
+            Gets a node representing IRIOrLiteral.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.LanguageIn">
+            <summary>
+            Gets a node representing languageIn.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.LanguageInConstraintComponent">
+            <summary>
+            Gets a node representing LanguageInConstraintComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.LessThan">
+            <summary>
+            Gets a node representing lessThan.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.LessThanConstraintComponent">
+            <summary>
+            Gets a node representing LessThanConstraintComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.LessThanOrEquals">
+            <summary>
+            Gets a node representing lessThanOrEquals.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.LessThanOrEqualsConstraintComponent">
+            <summary>
+            Gets a node representing LessThanOrEqualsConstraintComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Literal">
+            <summary>
+            Gets a node representing Literal.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.MaxCount">
+            <summary>
+            Gets a node representing maxCount.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.MaxCountConstraintComponent">
+            <summary>
+            Gets a node representing MaxCountConstraintComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.MaxExclusive">
+            <summary>
+            Gets a node representing maxExclusive.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.MaxExclusiveConstraintComponent">
+            <summary>
+            Gets a node representing MaxExclusiveConstraintComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.MaxInclusive">
+            <summary>
+            Gets a node representing maxInclusive.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.MaxInclusiveConstraintComponent">
+            <summary>
+            Gets a node representing MaxInclusiveConstraintComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.MaxLength">
+            <summary>
+            Gets a node representing maxLength.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.MaxLengthConstraintComponent">
+            <summary>
+            Gets a node representing MaxLengthConstraintComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Message">
+            <summary>
+            Gets a node representing message.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.MinCount">
+            <summary>
+            Gets a node representing minCount.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.MinCountConstraintComponent">
+            <summary>
+            Gets a node representing MinCountConstraintComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.MinExclusive">
+            <summary>
+            Gets a node representing minExclusive.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.MinExclusiveConstraintComponent">
+            <summary>
+            Gets a node representing MinExclusiveConstraintComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.MinInclusive">
+            <summary>
+            Gets a node representing minInclusive.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.MinInclusiveConstraintComponent">
+            <summary>
+            Gets a node representing MinInclusiveConstraintComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.MinLength">
+            <summary>
+            Gets a node representing minLength.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.MinLengthConstraintComponent">
+            <summary>
+            Gets a node representing MinLengthConstraintComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Namespace">
+            <summary>
+            Gets a node representing namespace.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Node">
+            <summary>
+            Gets a node representing node.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.NodeConstraintComponent">
+            <summary>
+            Gets a node representing NodeConstraintComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.NodeKind">
+            <summary>
+            Gets a node representing nodeKind.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.NodeKindConstraintComponent">
+            <summary>
+            Gets a node representing NodeKindConstraintComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.NodeShape">
+            <summary>
+            Gets a node representing NodeShape.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.NodeValidator">
+            <summary>
+            Gets a node representing nodeValidator.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Not">
+            <summary>
+            Gets a node representing not.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.NotConstraintComponent">
+            <summary>
+            Gets a node representing NotConstraintComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.OneOrMorePath">
+            <summary>
+            Gets a node representing oneOrMorePath.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Optional">
+            <summary>
+            Gets a node representing optional.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Or">
+            <summary>
+            Gets a node representing or.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.OrConstraintComponent">
+            <summary>
+            Gets a node representing OrConstraintComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Parameter">
+            <summary>
+            Gets a node representing parameter.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Path">
+            <summary>
+            Gets a node representing path.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Pattern">
+            <summary>
+            Gets a node representing pattern.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.PatternConstraintComponent">
+            <summary>
+            Gets a node representing PatternConstraintComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Prefix">
+            <summary>
+            Gets a node representing prefix.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Prefixes">
+            <summary>
+            Gets a node representing prefixes.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Property">
+            <summary>
+            Gets a node representing property.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.PropertyConstraintComponent">
+            <summary>
+            Gets a node representing PropertyShapeComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.PropertyShape">
+            <summary>
+            Gets a node representing PropertyShape.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.PropertyValidator">
+            <summary>
+            Gets a node representing propertyValidator.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.QualifiedMaxCount">
+            <summary>
+            Gets a node representing qualifiedMaxCount.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.QualifiedMaxCountConstraintComponent">
+            <summary>
+            Gets a node representing QualifiedMaxCountConstraintComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.QualifiedMinCount">
+            <summary>
+            Gets a node representing qualifiedMinCount.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.QualifiedMinCountConstraintComponent">
+            <summary>
+            Gets a node representing QualifiedMinCountConstraintComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.QualifiedValueShape">
+            <summary>
+            Gets a node representing qualifiedValueShape.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.QualifiedValueShapesDisjoint">
+            <summary>
+            Gets a node representing qualifiedValueShapesDisjoint.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Result">
+            <summary>
+            Gets a node representing result.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.ResultMessage">
+            <summary>
+            Gets a node representing resultMessage.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.ResultPath">
+            <summary>
+            Gets a node representing resultPath.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.ResultSeverity">
+            <summary>
+            Gets a node representing resultSeverity.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Select">
+            <summary>
+            Gets a node representing select.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Severity">
+            <summary>
+            Gets a node representing severity.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.SourceConstraint">
+            <summary>
+            Gets a node representing sourceConstraint.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.SourceConstraintComponent">
+            <summary>
+            Gets a node representing sourceConstraintComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.SourceShape">
+            <summary>
+            Gets a node representing sourceShape.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Sparql">
+            <summary>
+            Gets a node representing sparql.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.SparqlAskValidato">
+            <summary>
+            Gets a node representing SPARQLAskValidator.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.SparqlConstraintComponent">
+            <summary>
+            Gets a node representing SPARQLConstraintComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.TargetClass">
+            <summary>
+            Gets a node representing targetClass.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.TargetNode">
+            <summary>
+            Gets a node representing targetNode.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.TargetObjectsOf">
+            <summary>
+            Gets a node representing targetObjectsOf.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.TargetSubjectsOf">
+            <summary>
+            Gets a node representing targetSubjectsOf.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.UniqueLang">
+            <summary>
+            Gets a node representing uniqueLang.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.UniqueLangConstraintComponent">
+            <summary>
+            Gets a node representing UniqueLangConstraintComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.ValidationReport">
+            <summary>
+            Gets a node representing ValidationReport.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.ValidationResult">
+            <summary>
+            Gets a node representing ValidationResult.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Validator">
+            <summary>
+            Gets a node representing validator.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Value">
+            <summary>
+            Gets a node representing value.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Violation">
+            <summary>
+            Gets a node representing Violation.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Xone">
+            <summary>
+            Gets a node representing xone.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.XoneConstraintComponent">
+            <summary>
+            Gets a node representing XoneConstraintComponent.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.ZeroOrMorePath">
+            <summary>
+            Gets a node representing zeroOrMorePath.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.ZeroOrOnePath">
+            <summary>
+            Gets a node representing zeroOrOnePath.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Shapes">
+            <summary>
+            Gets the list of shapes.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Targets">
+            <summary>
+            Gets the list of targets.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.Constraints">
+            <summary>
+            Gets the list of constraints.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.BlankNodeKinds">
+            <summary>
+            Gets the list of blank node kinds.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.LiteralNodeKinds">
+            <summary>
+            Gets the list of literal node kinds.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.IriNodeKinds">
+            <summary>
+            Gets the list of IRI node kinds.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Shacl.Vocabulary.PredicatesToExpandInReport">
+            <summary>
+            Gets the list of predicates to expand in validation reports.
+            </summary>
+        </member>
+    </members>
+</doc>

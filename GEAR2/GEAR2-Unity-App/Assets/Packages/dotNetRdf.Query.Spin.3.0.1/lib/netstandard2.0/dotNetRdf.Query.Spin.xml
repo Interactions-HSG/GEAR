@@ -1,0 +1,1818 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>dotNetRdf.Query.Spin</name>
+    </assembly>
+    <members>
+        <member name="T:VDS.RDF.Query.Spin.Constraints.ConstraintsExtensions">
+            <summary>
+            Provides extensions to the SpinWrappedDataset class to check SPIN constraints
+            </summary>
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Constraints.ConstraintsExtensions.CheckConstraints(VDS.RDF.Query.Spin.SpinWrappedDataset,System.Collections.Generic.IEnumerable{VDS.RDF.INode},VDS.RDF.Query.Spin.Progress.IProgressMonitor)">
+            <summary>
+            Checks all spin:constraints for a given Resource set.
+            </summary>
+            <param name="dataset">the dataset containing the resource</param>
+            <param name="resources">the instances to run constraint checks on</param>
+            <param name="monitor">an (optional) progress monitor (currently ignored)</param>
+            <returns>a List of ConstraintViolations (empty if all is OK)</returns>
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Constraints.ConstraintsExtensions.CheckConstraints(VDS.RDF.Query.Spin.SpinWrappedDataset,System.Collections.Generic.IEnumerable{VDS.RDF.INode},System.Collections.Generic.List{VDS.RDF.Query.Spin.Statistics.SPINStatistics},VDS.RDF.Query.Spin.Progress.IProgressMonitor)">
+            <summary>
+            Checks all spin:constraints for a given Resource set.
+            </summary>
+            <param name="dataset">the model containing the resource</param>
+            <param name="resources">the instances to run constraint checks on</param>
+            <param name="stats">an (optional) List to add statistics to</param>
+            <param name="monitor">an (optional) progress monitor (currently ignored)</param>
+            <returns>a List of ConstraintViolations (empty if all is OK)</returns>
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Constraints.ConstraintsExtensions.CheckConstraints(VDS.RDF.Query.Spin.SpinWrappedDataset,VDS.RDF.Query.Spin.Progress.IProgressMonitor)">
+            <summary>
+            Checks all instances in a given Model against all spin:constraints and returns a List of constraint violations. 
+            A IProgressMonitor can be provided to enable the user to get intermediate status reports and to cancel the operation.
+            </summary>
+            <param name="dataset">the dataset to run constraint checks on</param>
+            <param name="monitor">an (optional) progress monitor (currently ignored)</param>
+            <returns>a List of ConstraintViolations (empty if all is OK)</returns>
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Constraints.ConstraintsExtensions.CheckConstraints(VDS.RDF.Query.Spin.SpinWrappedDataset,System.Collections.Generic.List{VDS.RDF.Query.Spin.Statistics.SPINStatistics},VDS.RDF.Query.Spin.Progress.IProgressMonitor)">
+            <summary>
+            Checks all instances in a given Model against all spin:constraints and returns a List of constraint violations. 
+            A IProgressMonitor can be provided to enable the user to get intermediate status reports and to cancel the operation.
+            </summary>
+            <param name="dataset">the dataset to run constraint checks on</param>
+            <param name="stats">an (optional) List to add statistics to</param>
+            <param name="monitor">an (optional) progress monitor (currently ignored)</param>
+            <returns>a List of ConstraintViolations (empty if all is OK)</returns>
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Constraints.ConstraintViolation">
+            An object representing a failure of a SPIN constraint.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Constraints.ConstraintViolation.#ctor(VDS.RDF.INode,System.Collections.Generic.List{VDS.RDF.Query.Spin.Constraints.SimplePropertyPath},System.Collections.Generic.List{VDS.RDF.Query.Spin.Model.ITemplateCall},System.String,VDS.RDF.INode)">
+            Constructs a new ConstraintViolation.
+            @param root  the root resource of the violation
+            @param paths  the paths (may be empty)
+            @param fixes  potential fixes for the violations (may be empty)
+            @param message  the message explaining the error
+            @param source  the SPIN Query or template call that has caused this violation
+                           (may be null)
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Constraints.ConstraintViolation.getSource">
+            Gets the SPIN Query or template call that has caused this violation.
+            @return the source (code should be robust against null values)
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Constraints.ObjectPropertyPath">
+            A SimplePropertyPath of the form SP->O.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Constraints.SimplePropertyPath">
+            A property path that describes a mechanism to get values starting
+            from a given RDF node (root) by following a given predicate.
+            There are two subclasses for SP->O and OP->S paths.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Constraints.SubjectPropertyPath">
+            A SimplePropertyPath of the form OP->S.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Core.Aggregations">
+            Manages the registered SPARQL aggregations (such as SUM).
+            These are loaded from the sp system ontology.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Core.Aggregations.getName(VDS.RDF.INode)">
+            If registered, returns the display name of a given aggregation type.
+            @param aggType  the aggregation type, e.g. sp:Sum
+            @return the name (e.g., "SUM") or null if not registered
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Core.Aggregations.getType(System.String)">
+            If registered, returns the aggregation INode for a given display name. 
+            @param name  the name (e.g., "SUM")
+            @return the type or null if not registered
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Core.Aggregations.register(VDS.RDF.INode,System.String)">
+            Programatically adds a new aggregation type.  This is usually only
+            populated from the sp system ontology, but API users may want to
+            bypass (and extend) this mechanism.
+            @param aggType  the type to register
+            @param name  the display name
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Core.ExtraPrefixes">
+            Manages extra prefixes that are always available even if not
+            explicitly declared.  Examples include fn and Jena's afn.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Core.ExtraPrefixes.Add(System.String,System.String)">
+            Programmatically adds a new prefix to be regarded as an "extra"
+            prefix.  These are prefixes that are assumed to be valid even if
+            they haven't been declared in the current ontology.
+            This method has no effect if the prefix was already set before.
+            @param prefix  the prefix to add
+            @param namespace  the namespace to add
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Core.ExtraPrefixes.Add(VDS.RDF.Query.Spin.Model.IResource)">
+            Attempts to add an extra prefix for a given Resource.
+            This does nothing if the prefix does not exist or is empty.
+            @param resource  the resource to get the namespace of
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Core.ExtraPrefixes.getExtraPrefixes">
+            Gets a Map from prefixes to namespaces.
+            The result should be treated as read-only.
+            @return the extra prefixes
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Core.SPINImports">
+            A singleton managing spin:imports.
+            
+            Subclasses can be installed that implement different loaders or
+            otherwise change the default behavior.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Core.SPINImports.getImportedGraph(System.Uri,VDS.RDF.IRdfReader)">
+            Attempts to load a graph with a given URI.
+            In the default implementation, this uses the Jena
+            OntDocumentManager and default loading mechanisms.
+            Subclasses can override this. 
+            @param uri  the base URI of the graph to load
+            @return the Graph or null to ignore this
+            @throws IOException 
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Core.SPINLabels">
+            A singleton that is used to render resources into strings.
+            By default this displays qnames (if possible). 
+            Can be changed, for example, to switch to displaying rdfs:labels
+            instead of qnames etc.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Core.SPINLabels.getCustomizedLabel(VDS.RDF.Query.Spin.Model.IResource)">
+            Gets a "human-readable" label for a given Resource.
+            This checks for any existing rdfs:label, otherwise falls back to
+            <code>getLabel()</code>.
+            @param resource
+            @return the label (never null)
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Core.SPINLabels.getLabel(VDS.RDF.INode)">
+            Gets the label for a given Resource.
+            @param resource  the Resource to get the label of
+            @return the label (never null)
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Core.SPINModuleRegistry">
+            A singleton that keeps track of all registered SPIN functions
+            and templates.  For example, in TopBraid this is populated by
+            walking all .spin. files in the Eclipse workspace.  Other
+            implementations may need to register their modules "manually".
+            
+            @author Holger Knublauch
+        </member>
+        <member name="F:VDS.RDF.Query.Spin.Core.SPINModuleRegistry.functions">
+            Remembers all function definitions (in their original Model) so that they
+            can be retrieved later.
+        </member>
+        <member name="F:VDS.RDF.Query.Spin.Core.SPINModuleRegistry.sources">
+            Remembers the source object (e.g. file) that a Function has been loaded from.
+        </member>
+        <member name="F:VDS.RDF.Query.Spin.Core.SPINModuleRegistry.templates">
+            Remembers all template definitions (in their original Model) so that they
+            can be retrieved later.
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Core.SPINModuleRegistry.set(VDS.RDF.Query.Spin.Core.SPINModuleRegistry)">
+            Sets the SPINModuleRegistry to another value.
+            @param value  the new value (not null)
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Core.SPINModuleRegistry.getFunction(System.Uri,VDS.RDF.Query.Spin.SpinProcessor)">
+            Gets a registered Function with a given URI.
+            @param uri  the URI of the Function to get
+            @param model  an (optional) Model that should also be used to look up
+                          locally defined functions (currently not used)
+            @return the Function or null if none was found
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Core.SPINModuleRegistry.getFunctions">
+            Gets a Collection of all registered Functions.
+            @return the Templates
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Core.SPINModuleRegistry.getModels">
+            Gets all Models that are associated to registered functions and templates.
+            @return the Models
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Core.SPINModuleRegistry.getTemplate(System.Uri,VDS.RDF.Query.Spin.SpinProcessor)">
+            Gets a Template with a given URI in its defining Model.
+            @param uri  the URI of the Template to look up
+            @param model  an (optional) Model that should also be used for look up
+            @return a Template or null
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Core.SPINModuleRegistry.getTemplates">
+            Gets a Collection of all registered Templates.
+            @return the Templates
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Core.SPINModuleRegistry.register(VDS.RDF.Query.Spin.Model.IFunction,System.Object,System.Boolean)">
+            Registers a Function with its URI to this registry.
+            As an optional side effect, if the provided function has a spin:body,
+            this method can also register an ARQ FunctionFactory at the current
+            Jena FunctionRegistry, using <code>registerARQFunction()</code>.
+            <b>Note that the Model attached to the function should be an OntModel
+            that also imports the system namespaces spin.owl and sp.owl - otherwise
+            the system may not be able to transform the SPIN RDF into the correct
+            SPARQL string.</b>
+            @param function  the Function (must be a URI resource)
+            @param source  an optional source for the function (e.g. a File)
+            @param addARQFunction  true to also add an entry to the ARQ function registry
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Core.SPINModuleRegistry.register(VDS.RDF.Query.Spin.Model.ITemplate)">
+            Registers a Template with its URI.
+            <b>Note that the Model attached to the template should be an OntModel
+            that also imports the system namespaces spin.owl and sp.owl - otherwise
+            the system may not be able to transform the SPIN RDF into the correct
+            SPARQL string.</b>
+            @param template  the Template (must be a URI resource)
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Core.SPINModuleRegistry.registerAll(VDS.RDF.Query.Spin.SpinProcessor)">
+            Registers all functions and templates from a given Model.
+            <b>Note that the Model should contain the triples from the
+            system namespaces spin.owl and sp.owl - otherwise the system
+            may not be able to transform the SPIN RDF into the correct
+            SPARQL string.  In a typical use case, the Model would be
+            an OntModel that also imports the SPIN system namespaces.</b>
+            @param model  the Model to iterate over
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Core.SPINModuleRegistry.registerARQFunction(VDS.RDF.Query.Spin.Model.IFunction)">
+            If the provided Function has an executable body (spin:body), then
+            register an ARQ function for it with the current FunctionRegistry.
+            If there is an existing function with the same URI already registered,
+            then it will only be replaced if it is also a SPINARQFunction.
+            @param spinFunction  the function to register
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Core.SPINModuleRegistry.registerARQPFunction(VDS.RDF.Query.Spin.Model.IFunction)">
+            If the provided Function has an executable body (spin:body), then
+            register an ARQ function for it with the current FunctionRegistry. 
+            If there is an existing function with the same URI already registered,
+            then it will only be replaced if it is also a SPINARQPFunction.
+            @param function  the function to register
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Core.SPINModuleRegistry.registerFunctions(VDS.RDF.Query.Spin.SpinProcessor)">
+            Registers all functions defined in a given Model.
+            This basically iterates over all instances of spin:Function and calls
+            <code>register(function)</code> for each of them.
+            @param model  the Model to add the functions of
+            @param source  an optional source of the Model
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Core.SPINModuleRegistry.registerTemplates(VDS.RDF.Query.Spin.SpinProcessor)">
+            Registers all templates defined in a given Model.
+            This basically iterates over all instances of spin:Template and calls
+            <code>register(template)</code> for each of them.
+            @param model  the Model to add the templates of
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Core.SPINModuleRegistry.reset">
+            Resets this registry, supporting things like server restarts.
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Inference.InferenceExtensions">
+            <summary>
+            Provides extensions to the SpinWrappedDataset class to process SPIN Rules
+            </summary>
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.LibraryOntology.ARG">
+            Constants to access the arg: namespace.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.LibraryOntology.RDFx">
+            Defines RDF resources that are not yet in the corresponding Jena class.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.LibraryOntology.SPIN">
+            Vocabulary of the SPIN Modeling Vocabulary.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.LibraryOntology.SPINMAP">
+             Vocabulary for http://spinrdf.org/spinmap
+            
+             Automatically generated with TopBraid Composer.
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.LibraryOntology.SPL">
+            Vocabulary of the SPIN Standard Modules Library (SPL).
+            
+            @author Holger Knublauch
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.LibraryOntology.SPR">
+            <summary>
+            Vocabulary for http://spinrdf.org/spr 
+            @author Holger Knublauch
+            </summary>
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.LibraryOntology.SPRA">
+             Vocabulary for http://spinrdf.org/spra
+            
+             @author Holger Knublauch
+        </member>
+        <member name="F:VDS.RDF.Query.Spin.Model.AbstractSPINResource.INDENTATION">
+            One level of indentation (four spaces), used by toString methods
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.ModuleImpl.addArgumentFromConstraint(VDS.RDF.Triple,System.Collections.Generic.List{VDS.RDF.Query.Spin.Model.IArgument})">
+            
+            @param constaint is a statement whose subject is a class, and whose predicate is SPIN.constraint
+            @param results
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IAbstractAttribute">
+            Shared base class for Argument and Attribute.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IAbstractAttribute.getComment">
+            Gets the description (stored in rdfs:comment) of this.
+            @return the description (if any exists)
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IAbstractAttribute.getPredicate">
+            Gets the specified sp:argProperty (if any).
+            @return the argProperty
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IAbstractAttribute.getValueType">
+            Gets the specified spl:valueType (if any).
+            @return the value type
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IAbstractAttribute.IsOptional">
+            Checks if this argument has been declared to be optional.
+            For Arguments this means spl:optional = true.
+            For Attributes this means spl:minCardinality = 0
+            @return  true if optional
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IAggregation">
+            Part of a SPARQL expression that calls an Aggregation (such as SUM).
+            
+            @author Holger Knublauch
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IArgument">
+            Jena wrapper for instances of spl:Argument.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IArgument.getArgIndex">
+            If this is an ordered arg (sp:arg1, sp:arg2, ...) then this returns
+            the index of this, otherwise null.
+            @return the arg index or null if this does not have an index
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IArgument.getDefaultValue">
+            Returns any declared spl:defaultValue.
+            @return the default value or null
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IArgument.getVarName">
+            Gets the variable name associated with this Argument.
+            This is the local name of the predicate, i.e. implementations
+            can assume that this value is not null iff getPredicate() != null.
+            @return the variable name
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IAsk">
+            An ASK Query.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IAttribute">
+            Jena wrapper for spl:Attribute.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IAttribute.getDefaultValue">
+            Gets the declared default value of this attribute, as defined
+            using spl:defaultValue.  Might be null.
+            @return the default value
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IAttribute.getMaxCount">
+            Gets the maximum cardinality of this attribute, if specified.
+            This is based on spl:maxCount.  Null if unspecified.
+            @return the maximum cardinality or null if none is given
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IAttribute.getMinCount">
+            Gets the minimum cardinality of this attribute.
+            This is based on spl:minCount.  Default value is 0.
+            @return the minimum cardinality
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IBind">
+            A BIND assignment element.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IBind.getExpression">
+            Gets the SPARQL expression delivering the assigned value.
+            @return the expression
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IBind.getVariable">
+            Gets the variable on the right hand side of the BIND.
+            @return the Variable
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IClear">
+            A SPARQL Update CLEAR operation.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IClear.isSilent">
+            Checks if this Update operation has been marked to be SILENT.
+            @return true if SILENT
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.ICommand">
+             Represents instances of sp:Command (Queries or Update requests).
+            
+             @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.ICommand.getComment">
+            Gets the comment if any has been stored as rdfs:comment.
+            @return the comment or null
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.ICommandWithWhere">
+            An abstraction for Query, Modify and DeleteWhere, i.e. all SPARQL commands
+            that may contain a WHERE clause.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.ICommandWithWhere.getWhere">
+            Gets the ElementList of the WHERE clause of this query.
+            Might be null or RDF.nil.
+            @return the WHERE clause as an ElementList
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IConstruct">
+            A CONSTRUCT Query.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IConstruct.getTemplates">
+            Gets the list of TripleTemplates in the head of the query.
+            @return the templates
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.ICreate">
+            A SPARQL Update CREATE operation.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.ICreate.isSilent">
+            Checks if this Update operation has been marked to be SILENT.
+            @return true if SILENT
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IDelete">
+             Deprecated: for old SPIN files only.
+            
+             @author Holger Knublauch
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IDeleteData">
+            A SPARQL Update DELETE DATA operation.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IDeleteWhere">
+            A SPARQL Update DELETE WHERE operation.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IDescribe">
+            A DESCRIBE query.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IDescribe.getResultNodes">
+            Gets the result nodes of this query.  The resulting Resources will be
+            automatically typecast into Variable if they are variables.
+            @return a List of Resources (or Variables)
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IDrop">
+            A SPARQL Update DROP operation.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IDrop.isSilent">
+            Checks if this Update operation has been marked to be SILENT.
+            @return true if SILENT
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IElement">
+            The abstract base interface for the various Element types.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IElementGroup">
+            A collection of zero or more child Elements.
+            Implementations include Optional, Union etc.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IElementGroup.getElements">
+            Gets the List of child Elements.
+            @return a List of children
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IElementList">
+            An RDFList representing a plain list of sub-Elements in a Query.
+            Example:
+            
+            ASK WHERE {
+                {
+                    ?this is:partOf :ElementList
+            	   } 
+            }
+            
+            @author Holger Knublauch
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IExists">
+             An EXISTS element group.
+            
+             @author Holger Knublauch
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IFilter">
+            A SPARQL FILTER element.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IFilter.getExpression">
+            Gets the expression representing the filter condition.
+            The result object will be typecast into the most specific
+            subclass of INode, e.g. FunctionCall or Variable.
+            @return the expression or null
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IFunction">
+            A SPIN Function module (not: FunctionCall).
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IFunction.getReturnType">
+            Gets the value of the spin:returnType property, if any.
+            @return the return type or null
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IFunction.isMagicProperty">
+            Checks if this function is a magic property, marked by having
+            rdf:type spin:MagicProperty.
+            @return true  if this is a magic property
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IFunction.isPrivate">
+            Indicates if spin:private is set to true for this function.
+            @return true  if marked private
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IFunctionCall">
+            Part of a SPARQL expression that calls a Function.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IFunctionCall.getArguments">
+            Gets a list of argument RDFNodes, whereby each INode is already cast
+            into the most specific subclass possible.  In particular, arguments are
+            either instances of Variable, FunctionCall or INode (constant)
+            @return the List of arguments
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IFunctionCall.getArgumentsMap">
+            Gets a Map from properties (such as sp:arg1, sp:arg2) to their declared
+            argument values.  The map will only contain non-null arguments.
+            @return a Map of arguments
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IFunctionCall.getFunction">
+            Gets the URI INode of the Function being called here.
+            The resulting INode will be in the function's defining
+            Model, for example if loaded into the library from a .spin. file.
+            @return the function in its original Model
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IInsert">
+             Deprecated: for old SPIN files only.
+            
+             @author Holger Knublauch
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IInsertData">
+            A SPARQL Update INSERT DATA operation.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.ILoad">
+            A SPARQL Update LOAD operation.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.ILoad.isSilent">
+            Checks if this Update operation has been marked to be SILENT.
+            @return true if SILENT
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IMinus">
+             A MINUS element group.
+            
+             @author Holger Knublauch
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IModify">
+             A SPARQL Update operation representing a DELETE/INSERT.
+            
+             @author Holger Knublauch
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IModule">
+            Instances of spin:Module (or subclasses thereof).
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IModule.getArguments(System.Boolean)">
+            Gets a List of all declared Arguments.
+            If ordered, then the local names of the predicates are used.
+            @param ordered  true to get an ordered list back (slower)
+            @return the (possibly empty) List of Arguments
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IModule.getArgumentsMap">
+            Gets a Map of variable names to Arguments.
+            @return a Map of variable names to Arguments
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IModule.getBody">
+            Gets the body (if defined).  The result will be type cast into the
+            most specific subclass of Command if possible.
+            @return the body or null
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IModule.getComment">
+            Gets the rdfs:comment of this (if any).
+            @return the comment or null
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IModule.isAbstract">
+            Checks if this Module has been declared to be abstract using spin:abstract.
+            @return true  if this is abstract
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IModuleCall">
+            Abstract base interface of TemplateCall and FunctionCall.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IModuleCall.getModule">
+            Gets the associated module, i.e. SPIN function or template, derived from the rdf:type.
+            @return the module
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.INamedGraph">
+            A named graph element (GRAPH keyword in SPARQL).
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.INamedGraph.getNameNode">
+            Gets the URI INode or Variable that holds the name of this
+            named graph.  If it's a Variable, then this method will typecast
+            it into an instance of Variable.
+            @return a INode or Variable
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.INotExists">
+             A NOT EXISTS element group.
+            
+             @author Holger Knublauch
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IOptional">
+            An OPTIONAL element group.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IResource">
+            An extension of the INode interface with additional
+            convenience methods to easier access property values. 
+            
+            @author Holger Knublauch
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.ISelect">
+            A SELECT query.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.ISelect.getResultVariables">
+            Gets a list of result variables, or null if we have a star
+            results list.  Note that the "variables" may in fact be
+            wrapped aggregations or expressions.
+            The results can be tested with is against
+            <code>Variable</code>, <code>Aggregation</code> or
+            <code>FunctionCall</code>.  Variables can have an additional
+            <code>sp:expression</code>, representing AS expressions.
+            @return the result "variables"
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.ISelect.isDistinct">
+            Checks is this query has the DISTINCT flag set.
+            @return true if distinct
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.ISelect.isReduced">
+            Checks if this query has the REDUCED flag set.
+            @return true if reduced
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IService">
+             A SERVICE element group.
+            
+             @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IService.getServiceURI">
+            Gets the URI of the SPARQL end point to invoke.
+            @return the service URI (or null if this is a Variable)
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IService.getServiceVariable">
+            The the variable of the SPARQL end point to invoke.
+            @return the Variable (or null if this is a URI)
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.ISolutionModifierQuery">
+            Shared functions of those Query types that can have solution modifiers.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.ISolutionModifierQuery.getLimit">
+            Gets the LIMIT or null.
+            @return the specified limit or null
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.ISolutionModifierQuery.getOffset">
+            Gets the OFFSET or null
+            @return the specified offset or null
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.ISPINInstance">
+            A INode that also may have spin constraints or rules attached to it.
+            This is basically a convenience layer that can be used to access those
+            constraints and rules more easily.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.ISPINInstance.getQueriesAndTemplateCalls(VDS.RDF.INode)">
+            Gets the queries and template calls associated with this.
+            @param predicate  the predicate such as <code>spin:rule</code>
+            @return a List of QueryOrTemplateCall instances
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IQuery">
+            Base interface of the various SPARQL query types such as
+            Ask, Construct, Describe and Select.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IQuery.getFrom">
+            Gets the list of URIs specified in FROM clauses.
+            @return a List of URI Strings
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IQuery.getFromNamed">
+            Gets the list of URIs specified in FROM NAMED clauses.
+            @return a List of URI Strings
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IQuery.getValues">
+            Gets the VALUES block at the end of the query if it exists. 
+            @return the Values or null
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IQuery.getWhereElements">
+            Gets the elements in the WHERE clause of this query.
+            The Elements will be typecast into the best suitable subclass.
+            @return a List of Elements
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.ISubQuery">
+            A nested sub-query.  Right now, only SELECT queries seem to be allowed
+            but this might change in the future.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.ISubQuery.getQuery">
+            Gets the nested query.
+            @return the query
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.ITemplate">
+            A template class definition.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.ITemplate.getLabelTemplate">
+            Gets the declared spin:labelTemplate (if any exists).
+            @return the label template string or null
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.ITemplateCall">
+            A template call.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.ITemplateCall.createQueryExecution(System.Collections.Generic.IEnumerable{System.Uri})">
+            Creates a QueryExecution that can be used to execute the associated query
+            with the correct variable bindings.
+            @param dataset  the Dataset to operate on
+            @return the QueryExecution
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.ITemplateCall.getArgumentsMap">
+            Gets a Map from ArgumentDescriptors to RDFNodes.
+            @return a Map from ArgumentDescriptors to RDFNodes
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.ITemplateCall.getArgumentsMapByProperties">
+            Gets a Map from Properties to RDFNodes derived from the
+            ArgumentDescriptors.
+            @return a Map from Properties to RDFNodes
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.ITemplateCall.getArgumentsMapByVarNames">
+            Gets a Map from variable names to RDFNodes derived from the
+            ArgumentDescriptors.
+            @return a Map from variable names to RDFNodes
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.ITemplateCall.getInitialBinding">
+            Gets the name-value pairs of the template call's arguments as a Jena-friendly
+            initial binding object.
+            @return the initial binding
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.ITemplateCall.getQueryString">
+            Gets this template call as a parsable SPARQL string, with all
+            pre-bound argument variables inserted as constants.
+            @return a SPARQL query string
+            @deprecated  should not be used: has issues if sp:text is used only,
+                         and may produce queries that in fact cannot be parsed back.
+                         As an alternative, consider getting the Command and a
+                         initial bindings mapping, then feed the QueryExecution with
+                         that initial binding for execution.
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.ITemplateCall.getTemplate">
+            Gets the associated Template, from the SPINModules registry.
+            @return the template
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.ITriple">
+            The base interface of TriplePattern and TripleTemplate.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.ITriple.getSubject">
+            Gets the subject of this Triple, downcasting it into Variable if appropriate.
+            @return the subject
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.ITriple.getPredicate">
+            Gets the predicate of this Triple, downcasting it into Variable if appropriate.
+            @return the predicate
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.ITriple.getObject">
+            Gets the object of this Triple, downcasting it into Variable if appropriate.
+            @return the object
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.ITriple.getObjectResource">
+            Gets the object as a INode.
+            @return the object or null if it's not a resource (i.e., a literal)
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.ITriplePath">
+            A triple path element.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.ITriplePath.getSubject">
+            Gets the subject.
+            @return the subject
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.ITriplePath.getObject">
+            Gets the object.
+            @return the object
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.ITriplePattern">
+            A triple pattern element.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.ITripleTemplate">
+            A triple template used in a Construct header.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IUnion">
+            A UNION element.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IUpdate">
+             Base interface of the top-level SPARQL UPDATE commands.
+            
+             @author Holger Knublauch
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IValues">
+            A VALUES element (inside of a WHERE clause).
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IValues.getBindings">
+            Gets the bindings (rows), from top to bottom as entered.
+            @return the Bindings
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IValues.getVarNames">
+            Gets the names of the declared variables, ordered as entered.
+            @return the variable names
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.IVariable">
+            A variable in a SPIN query.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IVariable.getName">
+            Gets the name of this variable (without the '?').
+            @return the variable name
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IVariable.getTriplePatterns">
+            Gets all TriplePatterns where this Variable is mentioned.
+            @return the TriplePatterns
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.IVariable.isBlankNodeVar">
+            Checks if this represents a blank node var.
+            @return true  if a blank node var
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Model.QueryOrTemplateCall">
+            A wrapper of either a Query or a TemplateCall.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.QueryOrTemplateCall.#ctor(VDS.RDF.Query.Spin.Model.IResource,VDS.RDF.Query.Spin.Model.IQuery)">
+            Constructs an instance representing a plain Query.
+            @param cls  the class the query is attached to
+            @param query  the SPIN Query
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.QueryOrTemplateCall.#ctor(VDS.RDF.Query.Spin.Model.IResource,VDS.RDF.Query.Spin.Model.ITemplateCall)">
+            Constructs an instance representing a template call.
+            @param cls  the class the template call is attached to
+            @param templateCall  the template call
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.QueryOrTemplateCall.getQuery">
+            If this is a Query, then get it.
+            @return the Query or null
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.QueryOrTemplateCall.getCls">
+            Gets the associated subject, e.g. the rdfs:Class that holds the spin:rule. 
+            @return the subject
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.QueryOrTemplateCall.getTemplateCall">
+            If this is a TemplateCall, then return it.
+            @return the TemplateCall or null
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Model.QueryOrTemplateCall.toString">
+            Gets a human-readable text of either the query or the template call.
+            Can also be used for sorting alphabetically.
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.SparqlUtil.IPrintable">
+            An interface for objects that can be printed into a PrintContext.
+            This is implemented by SPIN Queries and Elements.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SparqlUtil.IPrintable.Print(VDS.RDF.Query.Spin.SparqlUtil.ISparqlPrinter)">
+            Instructs this to print itself into a given PrintContext.
+            Implementations need to use the provided functions of p.
+            @param p  the context
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.SparqlUtil.BaseSparqlPrinter">
+            <summary>
+            The default implementation of the ISparqlPrinter interface.
+            
+            Except for IInsertData and IDeleteData commands, updates should redirect (as necessary) their Insert and Delete templates to the corresponding addTriplesTo and deleteTriplesFrom graphs so triples changes can be monitored correctly.
+            </summary>
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SparqlUtil.BaseSparqlPrinter.print(System.String)">
+            @param str Non-null string.
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SparqlUtil.BaseSparqlPrinter.qnameFor(VDS.RDF.Query.Spin.Model.IResource)">
+            Work-around for a bug in Jena: Jena would use the default
+            namespace of an imported Graph in a MultiUnion.
+            @param resource  the INode to get the qname for
+            @return the qname or null
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SparqlUtil.BaseSparqlPrinter.PrintEnhancedSPARQL(VDS.RDF.Query.Spin.Model.IDeleteData)">
+            <summary>
+            Prints the template required to process DELETE DATA commands.
+            </summary>
+            <param name="command">a IDeleteData instance</param>
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SparqlUtil.BaseSparqlPrinter.PrintEnhancedSPARQL(VDS.RDF.Query.Spin.Model.IInsertData)">
+            <summary>
+            Prints the template required to process INSERT DATA commands.
+            </summary>
+            <param name="command">a IInsertData instance</param>
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SparqlUtil.BaseSparqlPrinter.PrintEnhancedSPARQL(VDS.RDF.Query.Spin.Model.IModify)">
+            <summary>
+            Prints the SPARQL translation for MODIFY commands.
+            </summary>
+            <param name="command">a IModify instance</param>
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SparqlUtil.BaseSparqlPrinter.PrintEnhancedSPARQL(VDS.RDF.Query.Spin.Model.INamedGraph)">
+            <summary>
+            Handles translating NamedGraph patterns into 
+            </summary>
+            <param name="pattern"></param>
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.SparqlUtil.ISparqlPrinter">
+            <summary>
+            A status object responsible for converting SPIN expressions to SPARQL queries 
+            TODO relocate each IPrintable.print method into a single design-handling ISparqlFactory class
+            </summary>
+            <author>Holger Knublauch</author>
+            <author>Max Bronnimann</author>
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SparqlUtil.ISparqlPrinter.GetCommandText(VDS.RDF.Query.Spin.Model.ICommand)">
+            <summary>
+            Convert a SPIN resource into it's SPARQL representation
+            </summary>
+            <param name="spinResource"></param>
+            <returns></returns>
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Progress.IProgressMonitor">
+            An abstraction of the Eclipse IProgressMonitor for intermediate
+            status messages and the ability to cancel long-running processes.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Progress.IRunnableWithProgress">
+             A generic interface similar to Runnable, but with an additional
+             argument that allows the Runnable to display progress.
+            
+             @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Progress.IRunnableWithProgress.run(VDS.RDF.Query.Spin.Progress.IProgressMonitor)">
+            Runs the runnable.
+            @param monitor  an optional ProgressMonitor
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Progress.NullProgressMonitor">
+            <summary>
+            A ProgressMonitor that doesn't "do" anything.
+            Support for canceling is provided via <code>setCanceled</code>.
+            </summary>
+            <author>Holger Knublauch</author>
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Progress.SimpleProgressMonitor">
+             A simple implementation of ProgressMonitor that prints messages
+             to System.out.
+            
+             @author Holger Knublauch
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.SparqlTemplates">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SparqlTemplates.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SparqlTemplates.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SparqlTemplates.DeleteData">
+             <summary>
+               Looks up a localized string similar to PREFIX rdf:&lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;
+            PREFIX sd:&lt;http://www.w3.org/ns/sparql-service-description#&gt;
+            PREFIX dnr:&lt;dotnetrdf-spin:&gt;
+            
+            DELETE {
+            	GRAPH ?g {
+            		?s ?p ?o .
+            	} .
+            	GRAPH ?entailment {
+            		?s ?subP ?o .
+            		?s a ?subC .
+            	} .
+            	GRAPH @outputGraph {
+            		?s a ?subC .
+            	} .
+            }
+            INSERT {
+            	GRAPH ?g {
+            		?s ?resetRequired ?p .
+            		?s ?p ?otherValues .
+            	} .
+            	GRAPH @outputGraph {
+            		?s ?resetRequired ?p .
+            		@outputGraph dnr:hasChanged  ?s .
+            	} .
+            }
+            @USING_NAMED
+            USING NAMED @dataset [rest of string was truncated]&quot;;.
+             </summary>
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SparqlTemplates.InsertData">
+             <summary>
+               Looks up a localized string similar to PREFIX rdf:&lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;
+            PREFIX sd:&lt;http://www.w3.org/ns/sparql-service-description#&gt;
+            PREFIX dnr:&lt;dotnetrdf-spin:&gt;
+            
+            INSERT {
+            	GRAPH ?g {
+            		?s ?p ?o .
+            	} .
+            	GRAPH ?entailment {
+            		?s ?supP ?o .
+            		?s a ?supC .
+            	} .
+            	GRAPH @outputGraph {
+            		?s a ?newSupC .
+            		@outputGraph dnr:hasChanged  ?s .
+            	} .
+            }
+            @USING_DEFAULT
+            @USING_NAMED
+            USING NAMED @datasetUri
+            USING NAMED @outputGraph
+            WHERE {
+            	GRAPH @datasetUri {
+            	    ?addedTriples dnr:addTriplesTo ?g .
+            		OPTIONAL {
+             [rest of string was truncated]&quot;;.
+             </summary>
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SparqlTemplates.SetExecutionContext">
+             <summary>
+               Looks up a localized string similar to PREFIX dnr:&lt;dotnetrdf-spin:&gt;
+            DELETE {
+            	GRAPH @resourceRestriction {
+            		@resourceRestriction dnr:executionRestrictedTo ?s .
+            	}
+            }
+            INSERT {
+            	GRAPH @resourceRestriction {
+            		?s a ?class .
+            	}
+            }
+            USING @resourceRestrictions
+            @USING_DEFAULT
+            WHERE {
+            	GRAPH @resourceRestriction {
+            		@resourceRestriction dnr:executionRestrictedTo ?s .
+            	} .
+            	?s a ?class .
+            }.
+             </summary>
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.SpinSyntax">
+            <summary>
+            Static class containing Extension Methods used to serialize SPARQL Queries into the SPIN RDF Syntax
+            </summary>
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.SpinProcessor">
+            <summary>
+            TODO make this class internal
+            TODO refactor the initialization process to allow for dynamic SPIN configuration updates through the dataset API.
+            TODO avoid multiple query transformations (ie String => SparqlQuery => SPIN Resources => String) by using the native dotNetRDF algebra classes instead of IResource
+            </summary>
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinProcessor.Initialise(VDS.RDF.IGraph)">
+            <summary>
+            
+            </summary>
+            <param name="spinGraph"></param>
+            <returns></returns>
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.SpinWrappedDataset">
+            <summary>
+            Provides SPIN capabilities for a Dataset over any SPIN-unaware IUpdateableStorage (including the InMemoryManager).
+            TODO decide how to handle the default unnamed graph case
+            TODO design a concurrency management policy
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Query.Spin.SpinWrappedDataset.CommandCalls">
+            <summary>
+            The SPARQL update command calls made by this wrapper
+            </summary>
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.#ctor(VDS.RDF.Storage.IUpdateableStorage)">
+            <summary>
+            Inititalize a SpinWrapperDataset upon a storage engine using all the graphs in the store.
+            </summary>
+            <param name="storage"></param>
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.#ctor(System.Uri,VDS.RDF.Storage.IUpdateableStorage)">
+            <summary>
+            Inititalize a SpinWrapperDataset upon a storage engine using a RDF SparqlDataset definition.
+            </summary>
+            <param name="datasetUri"></param>
+            <param name="storage"></param>
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.#ctor(System.Uri,VDS.RDF.Storage.IUpdateableStorage,System.Collections.Generic.IEnumerable{System.Uri})">
+            <summary>
+            Inititalize a SPIN model upon a storage engine using a RDF SparqlDataset definition composed of the specified graphs.
+            </summary>
+            <param name="datasetUri"></param>
+            <param name="storage"></param>
+            <param name="graphUris"></param>
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SpinWrappedDataset.spinProcessor">
+            <summary>
+            Gets/sets the SpinProcessor that is assigned to this Dataset
+            </summary>
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.OnDatasetDescriptionChanged(System.Object,VDS.RDF.GraphEventArgs)">
+            <summary>
+            Event handler to monitor the current Dataset
+            </summary>
+            <param name="sender"></param>
+            <param name="args"></param>
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SpinWrappedDataset.QueryExecutionMode">
+            <summary>
+            Gets whether queries should be simply executed or monitored for SpinInference.
+            TODO find some sexier name
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SpinWrappedDataset.Namespaces">
+            <summary>
+            Gets the Dataset namespace prefixes map if supported.
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SpinWrappedDataset.Uri">
+            <summary>
+            Returns the current dataset Uri.
+            If the dataset has been updated use SourceUri to get the orignal dataset Uri
+            </summary>
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SpinWrappedDataset.SourceUri">
+            <summary>
+            Returns the original dataset Uri
+            </summary>
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.ImportGraph(System.Uri)">
+            <summary>
+            
+            </summary>
+            <param name="graphUri"></param>
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.ImportGraph(VDS.RDF.IGraph)">
+            <summary>
+            Imports a graph into the dataset and registers it as a SPIN.LibraryOntology for further SPIN processing.
+            </summary>
+            <param name="graph"></param>
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.CreateExecutionContext(System.Collections.Generic.IEnumerable{VDS.RDF.INode})">
+            <summary>
+            Builds a graph of rdf:type triples to restrict subsequent SPIN Constructors, Rules or Constraint checks evaluations
+            </summary>
+            <param name="resources"></param>
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SpinWrappedDataset.UpdatesMonitor">
+            <summary>
+            Gets/sets a graph to monitor global changes to the dataset.
+            Responsibility for the management of this graph is left to the caller.
+            Changes will be notified only at the end of the update process to avoid inducing too much I/O with each partial result.
+            </summary>
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.SetActiveGraph(System.Collections.Generic.IEnumerable{System.Uri})">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.SetActiveGraph(System.Collections.Generic.IList{VDS.RDF.IRefNode})">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.SetActiveGraph(System.Uri)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.SetActiveGraph(VDS.RDF.IRefNode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.SetDefaultGraph(System.Uri)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.SetDefaultGraph(VDS.RDF.IRefNode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.SetDefaultGraph(System.Collections.Generic.IEnumerable{System.Uri})">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.SetDefaultGraph(System.Collections.Generic.IList{VDS.RDF.IRefNode})">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.ResetActiveGraph">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.ResetDefaultGraph">
+            <inheritdoc />
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SpinWrappedDataset.DefaultGraphUris">
+            <inheritdoc />
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SpinWrappedDataset.DefaultGraphNames">
+            <inheritdoc />
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SpinWrappedDataset.ActiveGraphUris">
+            <inheritdoc />
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SpinWrappedDataset.ActiveGraphNames">
+            <inheritdoc />
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SpinWrappedDataset.UsesUnionDefaultGraph">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.AddGraph(VDS.RDF.IGraph)">
+            <summary>
+            Adds a graph in the dataset and submits it to SPIN processing.
+            If the graph already exists in the dataset, this will lead its replacement by the new graph.
+            </summary>
+            <param name="g"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.RemoveGraph(System.Uri)">
+            <summary>
+            Removes a graph from the Dataset.
+            The underlying graph and it's entailments are not deleted from the store, however all pending changes on the graph are cancelled
+            </summary>
+            <param name="graphUri"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.RemoveGraph(VDS.RDF.IRefNode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.HasGraph(System.Uri)">
+            <summary>
+            Gets whether a Graph with the given URI is the Dataset
+            </summary>
+            <param name="graphUri"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.HasGraph(VDS.RDF.IRefNode)">
+            <summary>
+            Gets whether a Graph with the given name is the Dataset.
+            </summary>
+            <param name="graphName">Graph name.</param>
+            <returns></returns>
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SpinWrappedDataset.Graphs">
+            <inheritdoc />
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SpinWrappedDataset.GraphUris">
+            <inheritdoc />
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SpinWrappedDataset.GraphNames">
+            <inheritdoc />
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SpinWrappedDataset.Item(System.Uri)">
+            <inheritdoc />
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SpinWrappedDataset.Item(VDS.RDF.IRefNode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.GetModifiableGraph(System.Uri)">
+            <summary>
+            
+            </summary>
+            <param name="graphUri"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.GetModifiableGraph(VDS.RDF.IRefNode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.ExecuteQuery(System.String)">
+            <summary>
+            Executes a SPARQL query on the dataset
+            </summary>
+            <param name="sparqlQuery"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.ExecuteUpdate">
+            <summary>
+            Executes any pending SPARQL Update command from changes made to the dataset trough the API
+            </summary>
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.ExecuteUpdate(System.String)">
+            <summary>
+            Executes the SPARQL Update command on the dataset
+            </summary>
+            <param name="sparqlUpdateCommandSet"></param>
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.Flush">
+            <summary>
+            Flushes changes to the dataset
+            TODO handle dataset changes as updates instread of overwriting it to make it workable in a concurrent environment.
+            </summary>
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.Discard">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.ResetExecutionContext">
+            <summary>
+            Resets internal registries
+            </summary>
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.ExecuteUpdate(System.Collections.Generic.IEnumerable{VDS.RDF.Query.Spin.Model.IUpdate})">
+            <summary>
+            TODO find a way to compile the global changes so ExecutionContexts can be set globally for Rules processing or Constraints checking.
+            </summary>
+            <param name="spinUpdateCommandSet"></param>
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SpinWrappedDataset.HasTriples">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.ContainsTriple(VDS.RDF.Triple)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.ContainsQuotedTriple(VDS.RDF.Triple)">
+            <inheritdoc />
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SpinWrappedDataset.Triples">
+            <inheritdoc />
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SpinWrappedDataset.QuotedTriples">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.GetTriplesWithSubject(VDS.RDF.INode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.GetTriplesWithSubject(System.Uri)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.GetTriplesWithPredicate(VDS.RDF.INode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.GetTriplesWithPredicate(System.Uri)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.GetTriplesWithObject(VDS.RDF.INode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.GetTriplesWithObject(System.Uri)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.GetTriplesWithSubjectPredicate(VDS.RDF.INode,VDS.RDF.INode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.GetTriplesWithSubjectObject(VDS.RDF.INode,VDS.RDF.INode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.GetTriplesWithPredicateObject(VDS.RDF.INode,VDS.RDF.INode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.GetQuoted(System.Uri)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.GetQuoted(VDS.RDF.INode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.GetQuotedWithObject(System.Uri)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.GetQuotedWithObject(VDS.RDF.INode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.GetQuotedWithPredicate(VDS.RDF.INode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.GetQuotedWithPredicate(System.Uri)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.GetQuotedWithSubject(VDS.RDF.INode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.GetQuotedWithSubject(System.Uri)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.GetQuotedWithSubjectPredicate(VDS.RDF.INode,VDS.RDF.INode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.GetQuotedWithSubjectObject(VDS.RDF.INode,VDS.RDF.INode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.GetQuotedWithPredicateObject(VDS.RDF.INode,VDS.RDF.INode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.GetTriples(System.Uri)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedDataset.GetTriples(VDS.RDF.INode)">
+            <inheritdoc />
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.SpinWrappedGraph">
+            <summary>
+            A simple IGraph implementation that only tracks triple removal and additions
+            </summary>
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.#ctor(VDS.RDF.IRefNode)">
+            <summary>
+            Create a new SPIN graph
+            </summary>
+            <param name="graphName">The graph name. May be null.</param>
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.RaiseTripleEvent(VDS.RDF.Triple,System.Boolean)">
+            <summary>
+            Helper method for raising the triple events manually
+            </summary>
+            <param name="t">Triple</param>
+            <param name="asserted">True to raise TripleAsserted, false to raise TripleRetracted</param>
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SpinWrappedGraph.AllQuotedNodes">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.Assert(VDS.RDF.Triple)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.Retract(VDS.RDF.Triple)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.Assert(System.Collections.Generic.IEnumerable{VDS.RDF.Triple})">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.Retract(System.Collections.Generic.IEnumerable{VDS.RDF.Triple})">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.Clear">
+            <inheritdoc />
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SpinWrappedGraph.BaseUri">
+            <inheritdoc />
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SpinWrappedGraph.Name">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SpinWrappedGraph.IsEmpty">
+            <inheritdoc />
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SpinWrappedGraph.NamespaceMap">
+            <inheritdoc />
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SpinWrappedGraph.Nodes">
+            <inheritdoc />
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SpinWrappedGraph.AllNodes">
+            <inheritdoc />
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SpinWrappedGraph.Triples">
+            <inheritdoc />
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SpinWrappedGraph.QuotedTriples">
+            <inheritdoc />
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SpinWrappedGraph.QuotedNodes">
+            <inheritdoc />
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SpinWrappedGraph.UriFactory">
+            <inheritdoc />
+        </member>
+        <member name="P:VDS.RDF.Query.Spin.SpinWrappedGraph.NormalizeLiteralValues">
+            <inheritdoc/>
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.CreateUriNode">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.CreateUriNode(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.GetBlankNode(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.GetLiteralNode(System.String,System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.GetLiteralNode(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.GetLiteralNode(System.String,System.Uri)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.GetTriples(System.Uri)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.GetTriples(VDS.RDF.INode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.GetTriplesWithObject(System.Uri)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.GetTriplesWithObject(VDS.RDF.INode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.GetTriplesWithPredicate(VDS.RDF.INode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.GetTriplesWithPredicate(System.Uri)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.GetTriplesWithSubject(VDS.RDF.INode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.GetTriplesWithSubject(System.Uri)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.GetTriplesWithSubjectPredicate(VDS.RDF.INode,VDS.RDF.INode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.GetTriplesWithSubjectObject(VDS.RDF.INode,VDS.RDF.INode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.GetTriplesWithPredicateObject(VDS.RDF.INode,VDS.RDF.INode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.GetQuoted(System.Uri)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.GetQuoted(VDS.RDF.INode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.GetQuotedWithObject(System.Uri)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.GetQuotedWithObject(VDS.RDF.INode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.GetQuotedWithPredicate(VDS.RDF.INode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.GetQuotedWithPredicate(System.Uri)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.GetQuotedWithSubject(VDS.RDF.INode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.GetQuotedWithSubject(System.Uri)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.GetQuotedWithSubjectPredicate(VDS.RDF.INode,VDS.RDF.INode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.GetQuotedWithSubjectObject(VDS.RDF.INode,VDS.RDF.INode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.GetQuotedWithPredicateObject(VDS.RDF.INode,VDS.RDF.INode)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.GetUriNode(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.GetUriNode(System.Uri)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.GetTripleNode(VDS.RDF.Triple)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.ContainsTriple(VDS.RDF.Triple)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.ContainsAssertedTriple(VDS.RDF.Triple)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.ContainsQuotedTriple(VDS.RDF.Triple)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.Merge(VDS.RDF.IGraph)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.Merge(VDS.RDF.IGraph,System.Boolean)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.Equals(VDS.RDF.IGraph)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.Equals(VDS.RDF.IGraph,System.Collections.Generic.Dictionary{VDS.RDF.INode,VDS.RDF.INode}@)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.IsSubGraphOf(VDS.RDF.IGraph)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.IsSubGraphOf(VDS.RDF.IGraph,System.Collections.Generic.Dictionary{VDS.RDF.INode,VDS.RDF.INode}@)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.HasSubGraph(VDS.RDF.IGraph)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.HasSubGraph(VDS.RDF.IGraph,System.Collections.Generic.Dictionary{VDS.RDF.INode,VDS.RDF.INode}@)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.Difference(VDS.RDF.IGraph)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.Unstar">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.ResolveQName(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="E:VDS.RDF.Query.Spin.SpinWrappedGraph.TripleAsserted">
+            <inheritdoc />
+        </member>
+        <member name="E:VDS.RDF.Query.Spin.SpinWrappedGraph.TripleRetracted">
+            <inheritdoc />
+        </member>
+        <member name="E:VDS.RDF.Query.Spin.SpinWrappedGraph.Changed">
+            <inheritdoc />
+        </member>
+        <member name="E:VDS.RDF.Query.Spin.SpinWrappedGraph.ClearRequested">
+            <inheritdoc />
+        </member>
+        <member name="E:VDS.RDF.Query.Spin.SpinWrappedGraph.Cleared">
+            <inheritdoc />
+        </member>
+        <member name="E:VDS.RDF.Query.Spin.SpinWrappedGraph.MergeRequested">
+            <inheritdoc />
+        </member>
+        <member name="E:VDS.RDF.Query.Spin.SpinWrappedGraph.Merged">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.CreateBlankNode">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.CreateBlankNode(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.CreateGraphLiteralNode">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.CreateGraphLiteralNode(VDS.RDF.IGraph)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.CreateLiteralNode(System.String,System.Uri)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.CreateLiteralNode(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.CreateLiteralNode(System.String,System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.CreateUriNode(System.Uri)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.CreateVariableNode(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.CreateTripleNode(VDS.RDF.Triple)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.GetNextBlankNodeID">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.GetSchema">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.ReadXml(System.Xml.XmlReader)">
+            <inheritdoc />
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.SpinWrappedGraph.WriteXml(System.Xml.XmlWriter)">
+            <inheritdoc />
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Statistics.ISPINStatisticsListener">
+            An interface for objects interested in updates to the SPINStatisticsManager.
+            This can be used to track the execution of SPIN with real-time updates.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Statistics.ISPINStatisticsListener.statisticsUpdated">
+            Called whenever the statistics have been updated.
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Statistics.SPINStatistics">
+            A wrapper to record the execution time of a given Query
+            for statistical purposes.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Statistics.SPINStatistics.#ctor(System.String,System.String,System.TimeSpan,System.DateTime,VDS.RDF.INode)">
+            Creates a new SPINStatistics object.
+            @param label  the label of the action that has been measured
+            @param queryText  the text of the query that was executed
+            @param duration  the total duration in ms
+            @param startTime  the start time of execution (for ordering)
+            @param context  the INode that for example was holding the spin:rule
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Statistics.SPINStatisticsManager">
+            A singleton managing statistics for SPIN execution.
+            In TopBraid, this singleton is used as a single entry point for various
+            statistics producing engines such as TopSPIN.
+            The results are displayed in the SPIN Statistics view of TBC.
+            
+            The SPINStatisticsManager is off by default, and needs to be activated
+            with <code>setRecording(true);</code>.
+            
+            @author Holger Knublauch
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Statistics.SPINStatisticsManager.get">
+            Gets the singleton instance of this class.
+            @return the SPINStatisticsManager (never null)
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Statistics.SPINStatisticsManager.add(System.Collections.Generic.IEnumerable{VDS.RDF.Query.Spin.Statistics.SPINStatistics})">
+            Adds new statistics and notifies any registered listeners.
+            This should only be called if <code>isRecording()</code> is true
+            to prevent the unnecessary creation of SPINStatistics objects.
+            @param values  the statistics to add
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Statistics.SPINStatisticsManager.addSilently(System.Collections.Generic.IEnumerable{VDS.RDF.Query.Spin.Statistics.SPINStatistics})">
+            Adds new statistics without notifying listeners.
+            This should only be called if <code>isRecording()</code> is true
+            to prevent the unnecessary creation of SPINStatistics objects.
+            @param values  the statistics to add
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Statistics.SPINStatisticsManager.getStatistics">
+            Gets all previously added statistics.
+            @return the statistics
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Statistics.SPINStatisticsManager.notifyListeners">
+            Notifies all registered SPINStatisticsListeners so that they can refresh themselves.
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Util.QuerySolutionMap">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Util.RDFUtil.getDatatypeURIs">
+            Gets a List of all datatype URIs.
+            @return a List the datatype URIs
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Util.RDFUtil.isNumeric(System.Uri)">
+            Checks if a given URI is a numeric datatype URI.
+            @param datatypeURI  the URI of the datatype to test
+            @return true if so
+        </member>
+        <member name="M:VDS.RDF.Query.Spin.Util.RDFUtil.isSystemDatatype(VDS.RDF.INode)">
+            Checks if a given INode represents a system XSD datatype such as xsd:int.
+            Note: this will not return true on user-defined datatypes or rdfs:Literal.
+            @param node  the node to test
+            @return true if node is a datatype
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Util.Resource">
+            <summary>
+            A utility class that wraps dotNetRDF Nodes with the same interface as the Jena Resource classes
+            </summary>
+        </member>
+        <member name="T:VDS.RDF.Query.Spin.Util.SpinDatasetDescription">
+            <summary>
+            
+            </summary>
+        </member>
+    </members>
+</doc>

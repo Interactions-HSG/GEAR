@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>dotNetRdf.Data.DataTables</name>
+    </assembly>
+    <members>
+        <member name="T:VDS.RDF.Data.DataTables.DataTableHandler">
+            <summary>
+            RDF Handler which turns triples into rows in a Data Table
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Data.DataTables.DataTableHandler.DefaultSubjectColumn">
+            <summary>
+            Constants for Default Column Names
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Data.DataTables.DataTableHandler.DefaultPredicateColumn">
+            <summary>
+            Constants for Default Column Names
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Data.DataTables.DataTableHandler.DefaultObjectColumn">
+            <summary>
+            Constants for Default Column Names
+            </summary>
+        </member>
+        <member name="F:VDS.RDF.Data.DataTables.DataTableHandler._table">
+            <summary>
+            Data Table into which Triples will be converted to rows
+            </summary>
+        </member>
+        <member name="M:VDS.RDF.Data.DataTables.DataTableHandler.#ctor(System.Data.DataTable,System.String,System.String,System.String)">
+            <summary>
+            Creates a new Handler for a given Data Table with custom column names
+            </summary>
+            <param name="table">Data Table</param>
+            <param name="subjColName">Subject Column Name</param>
+            <param name="predColName">Predicate Column Name</param>
+            <param name="objColName">Object Column Name</param>
+        </member>
+        <member name="M:VDS.RDF.Data.DataTables.DataTableHandler.#ctor(System.Data.DataTable)">
+            <summary>
+            Creates a new Handler for a given Data Table using the default column names
+            </summary>
+            <param name="table">Data Table</param>
+        </member>
+        <member name="M:VDS.RDF.Data.DataTables.DataTableHandler.HandleTripleInternal(VDS.RDF.Triple)">
+            <summary>
+            Handles a Triple by turning it into a row in the Data Table
+            </summary>
+            <param name="t">Triple</param>
+            <returns></returns>
+            <remarks>
+            To customize how a Triple is converted into a row in the table derive from this class and override this method
+            </remarks>
+        </member>
+        <member name="M:VDS.RDF.Data.DataTables.DataTableHandler.HandleQuadInternal(VDS.RDF.Triple,VDS.RDF.IRefNode)">
+            <summary>
+            Handles a quad by turning it into a row in the Data Table
+            </summary>
+            <param name="t">Triple</param>
+            <param name="graph">The name of the graph containing the triple.</param>
+            <returns></returns>
+            <remarks>
+            This implementation does not support handling triples in any graph other than the default graph. 
+            To customize how a Triple is converted into a row in the table derive from this class and override this method
+            </remarks>
+            <exception cref="T:VDS.RDF.Parsing.RdfParseException">Raised if <paramref name="graph"/> is not null, as this implementation only supports triples in the default graph.</exception>
+        </member>
+        <member name="P:VDS.RDF.Data.DataTables.DataTableHandler.AcceptsAll">
+            <summary>
+            Indicates that the Handler accepts all triples
+            </summary>
+        </member>
+        <member name="T:VDS.RDF.Data.DataTables.GraphExtensions">
+            <summary>
+            Extends <see cref="T:VDS.RDF.IGraph"/> with a method to retrieve the graph triples as a <see cref="T:System.Data.DataTable"/>
+            </summary>
+        </member>
+        <member name="M:VDS.RDF.Data.DataTables.GraphExtensions.ToDataTable(VDS.RDF.IGraph)">
+            <summary>
+            Casts a Graph to a DataTable with all Columns typed as <see cref="T:VDS.RDF.INode">INode</see> (Column Names are Subject, Predicate and Object
+            </summary>
+            <param name="g">Graph to convert</param>
+            <returns>
+            A DataTable containing three Columns (Subject, Predicate and Object) all typed as <see cref="T:VDS.RDF.INode">INode</see> with a Row per Triple
+            </returns>
+        </member>
+        <member name="T:VDS.RDF.Data.DataTables.SparqlResultSetExtensions">
+            <summary>
+            Extends <see cref="T:VDS.RDF.Query.SparqlResultSet"/> with a method to retrieve the results as a <see cref="T:System.Data.DataTable"/>
+            </summary>
+        </member>
+        <member name="M:VDS.RDF.Data.DataTables.SparqlResultSetExtensions.ToDataTable(VDS.RDF.Query.SparqlResultSet)">
+            <summary>
+            Casts a SPARQL Result Set to a DataTable with all Columns typed as <see cref="T:VDS.RDF.INode">INode</see> (Results with unbound variables will have nulls in the appropriate columns of their <see cref="T:System.Data.DataRow">DataRow</see>)
+            </summary>
+            <param name="results">SPARQL Result Set</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
