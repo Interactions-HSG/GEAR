@@ -1,8 +1,9 @@
 # GEAR2: Gaze-enabled Activity Recognition for Augmented Reality Feedback
 
-This repository contains supplementary material of an EXTENDED version of the application and data described in the publication:
+This repository contains supplementary material of the application and data described in the publication:
 
-Kenan Bektaş, Jannis Strecker, Simon Mayer, Kimberly Garcia, Jonas Hermann, Kay Erik Jenss, Yasmine Sheila Antille, and Marc Elias Solèr. 2023. GEAR: Gaze-enabled augmented reality for human activity recognition. In 2023 Symposium on Eye Tracking Research and Applications (ETRA ’23), May 30-June 2, 2023, Tübingen, Germany. ACM, New York, NY, USA, 9 pages. https://doi.org/10.1145/3588015.3588402
+Kenan Bektaş, Jannis Strecker, Simon Mayer, and Kimberly Garcia. 2024. Gaze-enabled activity recognition for augmented reality feedback. Computers & Graphics (March 2024), 103909. https://doi.org/10.1016/j.cag.2024.103909
+
 
 See the folder [GEAR-4-HAR](https://github.com/Interactions-HSG/GEAR/tree/main/GEAR-4-HAR) for more information.
 
