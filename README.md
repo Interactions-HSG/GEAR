@@ -12,9 +12,9 @@ Kenan Bektaş, Jannis Strecker, Simon Mayer, Kimberly Garcia, Jonas Hermann, Kay
 
 
 ## 2️⃣ GEAR2: Gaze-enabled Activity Recognition for Augmented Reality Feedback
-The folder [GEAR2](./GEAR2) contains an updated version of the other application with an extended dataset.
+*The folder [GEAR2](./GEAR2) contains an updated version of the other application with an extended dataset for the publication:*
 
-
+Kenan Bektaş, Jannis Strecker, Simon Mayer, and Kimberly Garcia. 2024. Gaze-enabled activity recognition for augmented reality feedback. Computers & Graphics (March 2024), 103909. https://doi.org/10.1016/j.cag.2024.103909
 
 ## 📧 Contact
 
